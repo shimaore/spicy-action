@@ -11,8 +11,6 @@
           ok:true
           full_name: @session.full_name
 
-      request = require 'request'
-
       couchdb_proxy = ->
           headers = {}
           headers[k] = v for own k,v of @request.headers
