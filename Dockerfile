@@ -6,6 +6,9 @@ RUN useradd -m spicy
 COPY . /home/spicy/spicy-action
 RUN chown -R spicy.spicy /home/spicy
 
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  supervisor
+
 USER spicy
 WORKDIR /home/spicy/spicy-action
 RUN mkdir log
