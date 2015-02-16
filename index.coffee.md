@@ -24,7 +24,7 @@ External (public) service.
 Express: Store our session in Redis so that we can offload the Socket.IO piece to a different server if needed.
 
         session_store = (require 'connect-redis') @session
-        @use session:
+        @use @session
           store: new session_store cfg.redis
           secret: cfg.session_secret
           resave: true
@@ -53,6 +53,17 @@ Internal (services): these only need to be able to pub/sub.
 
       zappa cfg.internal_host, cfg.internal_port, ->
 
+        @use (require 'cookie-parser')()
+
+Express: Store our session in Redis so that we can offload the Socket.IO piece to a different server if needed.
+
+        session_store = (require 'connect-redis') @session
+        @use @session
+          store: new session_store cfg.redis
+          secret: cfg.session_secret
+          resave: true
+          saveUnitialized: true
+
 Socket.IO: allow broadcast across multiple Socket.IO servers (through Redis pub/sub).
 
         @io.adapter redis_adapter
@@ -60,7 +71,6 @@ Socket.IO: allow broadcast across multiple Socket.IO servers (through Redis pub/
 Use CouchDB authentication.
 
         @helper {cfg,pkg}
-        @use (require 'cookie-parser')()
         couchdb_auth = require './couchdb-auth'
         @include couchdb_auth  if couchdb_auth.include?
         @use @wrap couchdb_auth.middleware  if couchdb_auth.middleware?
