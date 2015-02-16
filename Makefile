@@ -1,10 +1,8 @@
 #
 # This is a generic Makefile. It uses contents from package.json
 # to build Docker images.
-# The package name (in package.json) MUST be `docker.<name>`, which is
-# substituted (since `npm` doesn't allow slashes in names).
 #
-NAME=shimaore/`jq -r .name[7:] package.json`
+NAME=shimaore/`jq -r .name package.json`
 TAG=`jq -r .version package.json`
 
 image:
