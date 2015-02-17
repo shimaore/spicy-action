@@ -9,7 +9,9 @@
       @get '/_spicy_action', client_auth, ->
         @json
           ok:true
+          username: @session.couchdb_username
           full_name: @session.full_name
+          roles: @session.couchdb_roles
 
       make_proxy = (base) ->
         ->
