@@ -46,7 +46,8 @@ Local pub/sub logic.
 
 CouchDB reverse proxy with embedded authentication.
 
-        @helper {cfg}
+        @helper {cfg,pkg}
+        @cfg = cfg
         @include './public_proxy'
 
 Internal (services): these only need to be able to pub/sub.
