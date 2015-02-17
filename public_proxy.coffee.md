@@ -14,7 +14,7 @@
       couchdb_proxy = ->
           headers = {}
           headers[k] = v for own k,v of @request.headers
-          headers['X-Auth-CouchDB-Roles'] = @session.couchdb_roles
+          headers['X-Auth-CouchDB-Roles'] = @session.couchdb_roles.join ','
           headers['X-Auth-CouchDB-Token'] = @session.couchdb_token
           headers['X-Auth-CouchDB-UserName'] = @session.couchdb_username
           proxy = request @request.method, "#{@cfg.proxy_base}#{@request.url}"
