@@ -46,10 +46,11 @@
       @delete couchdb_urls, client_auth, couchdb_proxy
 
       couchdb_urls = ///
-        ^ /provisioning/
+        ^ /(provisioning|ruleset_[a-z\d_-]+)/
         ///
       couchdb_proxy = make_proxy @cfg.provisioning_base ? @cfg.proxy_base
       @get  '/provisioning', client_auth, couchdb_proxy
+      @get  '/ruleset_[a-z\d_-]+', client_auth, couchdb_proxy
       @get  couchdb_urls, client_auth, couchdb_proxy
       @post couchdb_urls, client_auth, couchdb_proxy
       @put  couchdb_urls, client_auth, couchdb_proxy
