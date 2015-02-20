@@ -50,6 +50,10 @@ CouchDB reverse proxy with embedded authentication.
         @cfg = cfg
         @include './public_proxy'
 
+Other local services.
+
+        @include './local/public'
+
 Internal (services): these only need to be able to pub/sub.
 
       zappa cfg.internal_host, cfg.internal_port, ->
