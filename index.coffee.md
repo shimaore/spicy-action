@@ -19,6 +19,12 @@ External (public) service.
 
       zappa cfg.public_host, cfg.public_port, https:cfg.ssl, ->
 
+        @get '/', ->
+          @json
+            ok:true
+            name:pkg.name
+            version:pkg.version
+
         @use (require 'cookie-parser')()
 
 Express: Store our session in Redis so that we can offload the Socket.IO piece to a different server if needed.
