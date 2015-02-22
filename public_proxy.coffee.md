@@ -57,6 +57,15 @@
       @delete couchdb_urls, client_auth, couchdb_proxy
 
       couchdb_urls = ///
+        ^ /_ccnq3/
+        ///
+      couchdb_proxy = make_proxy @cfg.ccnq3_base ? @cfg.proxy_base
+      @get  couchdb_urls, client_auth, couchdb_proxy
+      @post couchdb_urls, client_auth, couchdb_proxy
+      @put  couchdb_urls, client_auth, couchdb_proxy
+      @delete couchdb_urls, client_auth, couchdb_proxy
+
+      couchdb_urls = ///
         ^ /cdrs/
         ///
       couchdb_proxy = make_proxy @cfg.cdrs_base ? @cfg.proxy_base
