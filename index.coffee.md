@@ -24,6 +24,7 @@ External (public) service.
             ok:true
             name:pkg.name
             version:pkg.version
+            local:(require './local/package.json').version
 
         @use (require 'cookie-parser')()
 
