@@ -35,7 +35,7 @@ Express: Store our session in Redis so that we can offload the Socket.IO piece t
           store: new session_store cfg.redis
           secret: cfg.session_secret
           resave: true
-          saveUnitialized: true
+          saveUnitialized: false
 
 Socket.IO: allow broadcast across multiple Socket.IO servers (through Redis pub/sub).
 
@@ -74,7 +74,7 @@ Express: Store our session in Redis so that we can offload the Socket.IO piece t
           store: new session_store cfg.redis
           secret: cfg.session_secret
           resave: true
-          saveUnitialized: true
+          saveUnitialized: false
 
 Socket.IO: allow broadcast across multiple Socket.IO servers (through Redis pub/sub).
 
