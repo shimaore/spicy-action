@@ -56,6 +56,8 @@
       @put  couchdb_urls, client_auth, couchdb_proxy
       @delete couchdb_urls, client_auth, couchdb_proxy
 
+Legacy tools.
+
       couchdb_urls = ///
         ^ /_ccnq3/
         ///
@@ -64,6 +66,14 @@
       @post couchdb_urls, client_auth, couchdb_proxy
       @put  couchdb_urls, client_auth, couchdb_proxy
       @delete couchdb_urls, client_auth, couchdb_proxy
+
+New tools.
+
+      couchdb_urls = ///
+        ^ /tools/
+        ///
+      couchdb_proxy = make_proxy @cfg.tools_base ? @cfg.proxy_base
+      @get  couchdb_urls, client_auth, couchdb_proxy
 
       couchdb_urls = ///
         ^ /cdrs/
