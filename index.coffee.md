@@ -107,13 +107,17 @@ Use CouchDB authentication.
           @broadcast_to 'internal', shouted: {@id,@data}
 
         @on notify_users: ->
-          @broadcast_to 'internal', @data
-          @broadcast_to 'everyone', @data
+          @broadcast_to 'internal', 'notify', @data
+          @broadcast_to 'everyone', 'notify', @data
 
         @on call: ->
           @broadcast_to 'calls', 'call', @data
 
         @on trace: ->
           @broadcast_to 'traces', 'trace', @data
+        @on trace_completed: ->
+          @broadcast_to 'internal', 'trace_completed', @data
+        @on trace_error: ->
+          @broadcast_to 'internal', 'trace_error', @data
 
     run()
