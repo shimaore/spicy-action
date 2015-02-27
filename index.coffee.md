@@ -1,5 +1,5 @@
 Authentication Proxy
---------------------
+====================
 
 This is an authentication proxy for CouchDB, using a custom (cookie-session-based) authentication scheme.
 
@@ -16,6 +16,7 @@ This is also a Socket.IO server for external users, allowing the propagation of 
       redis_adapter = redis cfg.redis
 
 External (public) service.
+-------------------------
 
       zappa cfg.public_host, cfg.public_port, https:cfg.ssl, ->
 
@@ -44,6 +45,10 @@ Socket.IO: allow broadcast across multiple Socket.IO servers (through Redis pub/
 Local pub/sub logic.
 
         @on connection: ->
+          @emit welcome: {@id}
+          @join 'public' # No authentication required
+
+        @on join: ->
           @session (error,session) =>
             if error
               @emit failed: {msg:'Unable to retrieve your session.'}
@@ -51,12 +56,10 @@ Local pub/sub logic.
             unless session.couchdb_username?
               @emit failed: {msg:'You must authenticate first.'}
               return
+            @join 'everyone'
             if session.admin
               @join 'traces'
               @join 'calls'
-
-          @emit welcome: {@id}
-          @join 'everyone'
 
 CouchDB reverse proxy with embedded authentication.
 
@@ -69,6 +72,7 @@ Other local services.
         @include './local/public'
 
 Internal (services): these only need to be able to pub/sub.
+--------------------
 
       zappa cfg.internal_host, cfg.internal_port, ->
 
