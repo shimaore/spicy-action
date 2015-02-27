@@ -51,6 +51,9 @@ Local pub/sub logic.
             unless session.couchdb_username?
               @emit failed: {msg:'You must authenticate first.'}
               return
+            if session.admin
+              @join 'traces'
+              @join 'calls'
 
           @emit welcome: {@id}
           @join 'everyone'
