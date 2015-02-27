@@ -46,10 +46,10 @@ Local pub/sub logic.
         @on connection: ->
           @session (error,session) =>
             if error
-              @emit error: {msg:'Unable to retrieve your session.'}
+              @emit failed: {msg:'Unable to retrieve your session.'}
               return
-            unless session.couchdb_username
-              @emit error: {msg:'You must authenticate first.'}
+            unless session.couchdb_username?
+              @emit failed: {msg:'You must authenticate first.'}
               return
 
           @emit welcome: {@id}
