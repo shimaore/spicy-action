@@ -44,9 +44,13 @@ Socket.IO: allow broadcast across multiple Socket.IO servers (through Redis pub/
 Local pub/sub logic.
 
         @on connection: ->
-          unless @session.couchdb_username
-            @emit error: 'You must authenticate first.'
-            return
+          @session (error,session) =>
+            if error
+              @emit error: {msg:'Unable to retrieve your session.'}
+              return
+            unless session.couchdb_username
+              @emit error: {msg:'You must authenticate first.'}
+              return
 
           @emit welcome: {@id}
           @join 'everyone'
