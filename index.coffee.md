@@ -74,7 +74,7 @@ Internal (services): these only need to be able to pub/sub.
 Express: Store our session in Redis so that we can offload the Socket.IO piece to a different server if needed.
 
         session_store = (require 'connect-redis') @session
-        @use @session
+        @use session:
           store: new session_store cfg.redis
           secret: cfg.session_secret
           resave: true
