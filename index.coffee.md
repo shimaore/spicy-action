@@ -13,8 +13,6 @@ This is also a Socket.IO server for external users, allowing the propagation of 
 
       redis = require 'socket.io-redis'
 
-      redis_adapter = redis cfg.redis
-
 External (public) service.
 -------------------------
 
@@ -40,7 +38,7 @@ Express: Store our session in Redis so that we can offload the Socket.IO piece t
 
 Socket.IO: allow broadcast across multiple Socket.IO servers (through Redis pub/sub).
 
-        @io.adapter redis_adapter
+        @io.adapter redis cfg.redis
 
 Local pub/sub logic.
 
@@ -86,7 +84,7 @@ Express: Store our session in Redis so that we can offload the Socket.IO piece t
 
 Socket.IO: allow broadcast across multiple Socket.IO servers (through Redis pub/sub).
 
-        @io.adapter redis_adapter
+        @io.adapter redis cfg.redis
 
 Use CouchDB authentication.
 
