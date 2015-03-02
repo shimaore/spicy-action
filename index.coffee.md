@@ -53,7 +53,7 @@ Local pub/sub logic.
             @emit failed: {msg:'You must authenticate first.'}
             return
           @join 'everyone'
-          if session.admin
+          if @session.admin
             @join 'traces'
             @join 'calls'
           @emit ready: roles:@session.couchdb_roles
