@@ -76,6 +76,12 @@ New tools.
       @get  couchdb_urls, client_auth, couchdb_proxy
 
       couchdb_urls = ///
+        ^ /logging/
+        ///
+      couchdb_proxy = make_proxy @cfg.logging_base ? @cfg.proxy_base
+      @get  couchdb_urls, client_auth, couchdb_proxy
+
+      couchdb_urls = ///
         ^ /cdrs/
         ///
       couchdb_proxy = make_proxy @cfg.cdrs_base ? @cfg.proxy_base
