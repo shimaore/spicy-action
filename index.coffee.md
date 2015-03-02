@@ -52,9 +52,13 @@ Local pub/sub logic.
             return
           @join 'everyone'
           if @session.admin
-            @join 'traces'
+            @join 'internal'
             @join 'calls'
           @emit ready: roles:@session.couchdb_roles
+
+        @on trace: ->
+          if @session.admin
+            @broadcast_to 'traces', 'trace', @data
 
 CouchDB reverse proxy with embedded authentication.
 
@@ -121,6 +125,8 @@ Use CouchDB authentication.
 
         @on trace: ->
           @broadcast_to 'traces', 'trace', @data
+        @on trace_started: ->
+          @broadcast_to 'internal', 'trace_started', @data
         @on trace_completed: ->
           @broadcast_to 'internal', 'trace_completed', @data
         @on trace_error: ->
