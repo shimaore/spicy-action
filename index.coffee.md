@@ -45,21 +45,18 @@ Socket.IO: allow broadcast across multiple Socket.IO servers (through Redis pub/
 Local pub/sub logic.
 
         @on connection: ->
-          @emit welcome: {@id}
           @join 'public' # No authentication required
+          @emit welcome: {@id}
 
         @on join: ->
-          @session (error,session) =>
-            if error
-              @emit failed: {msg:'Unable to retrieve your session.'}
-              return
-            unless session.couchdb_username?
-              @emit failed: {msg:'You must authenticate first.'}
-              return
-            @join 'everyone'
-            if session.admin
-              @join 'traces'
-              @join 'calls'
+          unless @session?.couchdb_username?
+            @emit failed: {msg:'You must authenticate first.'}
+            return
+          @join 'everyone'
+          if session.admin
+            @join 'traces'
+            @join 'calls'
+          @emit ready: roles:@session.couchdb_roles
 
 CouchDB reverse proxy with embedded authentication.
 
