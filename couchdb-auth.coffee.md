@@ -22,7 +22,7 @@ Authenticate against CouchDB
         @res.end()
         return
 
-      if not credentials?
+      if not user?
         need_auth()
         return
 

@@ -83,6 +83,12 @@ Internal (services): these only need to be able to pub/sub.
 
         @use (require 'cookie-parser')()
 
+Use CouchDB authentication.
+
+        auth_module = require './couchdb-auth'
+        @include auth_module  if auth_module.include?
+        @auth = @wrap auth_module.middleware if auth_module.middleware?
+
 Express: Store our session in Redis so that we can offload the Socket.IO piece to a different server if needed.
 
         session_store = (require 'connect-redis') @session
@@ -96,12 +102,14 @@ Socket.IO: allow broadcast across multiple Socket.IO servers (through Redis pub/
 
         @io.adapter redis cfg.redis
 
-Use CouchDB authentication.
-
         @helper {cfg,pkg}
-        couchdb_auth = require './couchdb-auth'
-        @include couchdb_auth  if couchdb_auth.include?
-        @use @wrap couchdb_auth.middleware  if couchdb_auth.middleware?
+
+        @get '/', ->
+          @json
+            ok:true
+            name:pkg.name
+            version:pkg.version
+            local:(require './local/package.json').version
 
         @on connection: ->
           @emit welcome: {@id}
