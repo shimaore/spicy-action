@@ -30,14 +30,17 @@ Authenticate against CouchDB
       .get "#{@cfg.auth_base ? @cfg.proxy_base}/_session"
       .accept 'json'
       .auth user.name, user.pass
-      .then ({body}) ->
+      .then ({body}) =>
         @session.couchdb_username = body.userCtx.name
         @session.couchdb_roles = body.userCtx.roles
         @session.couchdb_token = hex_hmac_sha1 @cfg.couchdb_secret, @session.couchdb_username
-        @next()
       .catch ->
         need_auth()
         return
+      .then =>
+        @next()
+      .catch (error) ->
+        throw error
 
     crypto = require 'crypto'
     hex_hmac_sha1 = (key,value) ->
