@@ -76,7 +76,7 @@ Other local services.
 
         @include './local/public'
 
-Internal (services): these only need to be able to pub/sub.
+Internal (services): these need to be able to pub/sub and proxy.
 --------------------
 
       zappa cfg.internal_host, cfg.internal_port, ->
@@ -145,5 +145,15 @@ Socket.IO: allow broadcast across multiple Socket.IO servers (through Redis pub/
           @broadcast_to 'internal', 'trace_completed', @data
         @on trace_error: ->
           @broadcast_to 'internal', 'trace_error', @data
+
+CouchDB reverse proxy with embedded authentication.
+
+        @helper {cfg,pkg}
+        @cfg = cfg
+        @include './public_proxy'
+
+Other local services.
+
+        @include './local/public'
 
     run()
