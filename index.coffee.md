@@ -27,6 +27,12 @@ External (public) service.
 
         @use (require 'cookie-parser')()
 
+Use `local` authentication.
+
+        auth_module = require './local/auth'
+        @include auth_module  if auth_module.include?
+        @auth = @wrap auth_module.middleware if auth_module.middleware?
+
 Express: Store our session in Redis so that we can offload the Socket.IO piece to a different server if needed.
 
         session_store = (require 'connect-redis') @session

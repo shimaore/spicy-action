@@ -2,11 +2,7 @@
 
       request = require 'superagent-as-promised'
 
-      local_auth = require './local/auth'
-      @include local_auth  if local_auth.include?
-      client_auth = @wrap local_auth.middleware  if local_auth.middleware?
-
-      @get '/_spicy_action', client_auth, ->
+      @get '/_spicy_action', @auth, ->
         @json
           ok:true
           username: @session.couchdb_username
@@ -40,21 +36,21 @@
         ///
 
       couchdb_proxy = make_proxy @cfg.proxy_base
-      @get  couchdb_urls, client_auth, couchdb_proxy
-      @post couchdb_urls, client_auth, couchdb_proxy
-      @put  couchdb_urls, client_auth, couchdb_proxy
-      @delete couchdb_urls, client_auth, couchdb_proxy
+      @get  couchdb_urls, @auth, couchdb_proxy
+      @post couchdb_urls, @auth, couchdb_proxy
+      @put  couchdb_urls, @auth, couchdb_proxy
+      @delete couchdb_urls, @auth, couchdb_proxy
 
       couchdb_urls = ///
         ^ /(provisioning|ruleset_[a-z\d_-]+)/
         ///
       couchdb_proxy = make_proxy @cfg.provisioning_base ? @cfg.proxy_base
-      @get  '/provisioning', client_auth, couchdb_proxy
-      @get  '/ruleset_[a-z\d_-]+', client_auth, couchdb_proxy
-      @get  couchdb_urls, client_auth, couchdb_proxy
-      @post couchdb_urls, client_auth, couchdb_proxy
-      @put  couchdb_urls, client_auth, couchdb_proxy
-      @delete couchdb_urls, client_auth, couchdb_proxy
+      @get  '/provisioning', @auth, couchdb_proxy
+      @get  '/ruleset_[a-z\d_-]+', @auth, couchdb_proxy
+      @get  couchdb_urls, @auth, couchdb_proxy
+      @post couchdb_urls, @auth, couchdb_proxy
+      @put  couchdb_urls, @auth, couchdb_proxy
+      @delete couchdb_urls, @auth, couchdb_proxy
 
 Legacy tools.
 
@@ -62,10 +58,10 @@ Legacy tools.
         ^ /_ccnq3/
         ///
       couchdb_proxy = make_proxy @cfg.ccnq3_base ? @cfg.proxy_base
-      @get  couchdb_urls, client_auth, couchdb_proxy
-      @post couchdb_urls, client_auth, couchdb_proxy
-      @put  couchdb_urls, client_auth, couchdb_proxy
-      @delete couchdb_urls, client_auth, couchdb_proxy
+      @get  couchdb_urls, @auth, couchdb_proxy
+      @post couchdb_urls, @auth, couchdb_proxy
+      @put  couchdb_urls, @auth, couchdb_proxy
+      @delete couchdb_urls, @auth, couchdb_proxy
 
 New tools.
 
@@ -73,17 +69,17 @@ New tools.
         ^ /tools/
         ///
       couchdb_proxy = make_proxy @cfg.tools_base ? @cfg.proxy_base
-      @get  couchdb_urls, client_auth, couchdb_proxy
+      @get  couchdb_urls, @auth, couchdb_proxy
 
       couchdb_urls = ///
         ^ /logging/
         ///
       couchdb_proxy = make_proxy @cfg.logging_base ? @cfg.proxy_base
-      @get  couchdb_urls, client_auth, couchdb_proxy
+      @get  couchdb_urls, @auth, couchdb_proxy
 
       couchdb_urls = ///
         ^ /cdrs/
         ///
       couchdb_proxy = make_proxy @cfg.cdrs_base ? @cfg.proxy_base
-      @get  '/cdrs', client_auth, couchdb_proxy
-      @get  couchdb_urls, client_auth, couchdb_proxy
+      @get  '/cdrs', @auth, couchdb_proxy
+      @get  couchdb_urls, @auth, couchdb_proxy
