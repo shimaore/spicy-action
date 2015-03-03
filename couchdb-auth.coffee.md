@@ -26,20 +26,18 @@ Authenticate against CouchDB
         need_auth()
         return
 
-      Promise.resolve()
-      .then ->
-        request
-        .get "#{@cfg.proxy_base}/_session"
-        .accept 'json'
-        .auth user.name, user.pass
-        .then ({body}) ->
-          @session.couchdb_username = body.userCtx.name
-          @session.couchdb_roles = body.userCtx.roles
-          @session.couchdb_token = hex_hmac_sha1 @cfg.couchdb_secret, @session.couchdb_username
-          @next()
-        .catch ->
-          need_auth()
-          return
+      request
+      .get "#{@cfg.auth_base ? @cfg.proxy_base}/_session"
+      .accept 'json'
+      .auth user.name, user.pass
+      .then ({body}) ->
+        @session.couchdb_username = body.userCtx.name
+        @session.couchdb_roles = body.userCtx.roles
+        @session.couchdb_token = hex_hmac_sha1 @cfg.couchdb_secret, @session.couchdb_username
+        @next()
+      .catch ->
+        need_auth()
+        return
 
     crypto = require 'crypto'
     hex_hmac_sha1 = (key,value) ->
