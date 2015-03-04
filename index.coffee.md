@@ -25,7 +25,7 @@ External (public) service.
             version:pkg.version
             local:(require './local/package.json').version
 
-        @use (require 'cookie-parser')()
+        @use 'cookie-parser'
 
 Authentication
 
@@ -95,7 +95,7 @@ Internal (services): these need to be able to pub/sub and proxy.
 
       zappa cfg.internal_host, cfg.internal_port, ->
 
-        @use (require 'cookie-parser')()
+        @use 'cookie-parser'
 
 Use CouchDB authentication.
 
