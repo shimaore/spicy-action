@@ -11,19 +11,26 @@ Authenticate against CouchDB
     cfg = require './local/config.json'
 
     @middleware = ->
+
+Skip if the session is already established.
+
       if @session.couchdb_token?
         @next()
         return
 
+Skip if the user is not trying to authenticate using Basic.
+
       user = basic_auth @req
+
+      if not user?
+        @next()
+        return
+
+From this point on we are _the_ authentication method and might reject at will.
 
       need_auth = =>
         @res.writeHead 401, 'WWW-Authenticate': "Basic: realm=#{@pkg.name}"
         @res.end()
-        return
-
-      if not user?
-        need_auth()
         return
 
       request
