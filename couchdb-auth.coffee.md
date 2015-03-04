@@ -11,7 +11,7 @@ Authenticate against CouchDB
     cfg = require './local/config.json'
 
     @middleware = ->
-      if @session.couchdb_username?
+      if @session.couchdb_token?
         @next()
         return
 
