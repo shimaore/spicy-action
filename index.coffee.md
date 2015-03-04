@@ -18,7 +18,7 @@ This is also a Socket.IO server for external users, allowing the propagation of 
           @next()
           return
         @session = null
-        @res.writeHead 401, 'WWW-Authenticate': "Basic: realm=#{@pkg.name}"
+        @res.status 401, 'WWW-Authenticate': "Basic: realm=#{@pkg.name}"
         @json error: 'Not authenticated'
         @res.end()
         return
