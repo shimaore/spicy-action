@@ -59,6 +59,9 @@ Express: Store our session in Redis so that we can offload the Socket.IO piece t
           resave: true
           unset: 'destroy'
           saveUninitialized: true
+          cookie:
+            maxAge: cfg.session_maxage ? 30*60*1000
+            secure: cfg.session_secure ? true
 
 Socket.IO: allow broadcast across multiple Socket.IO servers (through Redis pub/sub).
 
