@@ -13,6 +13,16 @@ This is also a Socket.IO server for external users, allowing the propagation of 
 
       redis = require 'socket.io-redis'
 
+      auth_required = ->
+        if @session.couchdb_token?
+          @next()
+          return
+        @session = null
+        @res.writeHead 401, 'WWW-Authenticate': "Basic: realm=#{@pkg.name}"
+        @json error: 'Not authenticated'
+        @res.end()
+        return
+
 External (public) service.
 -------------------------
 
@@ -38,15 +48,7 @@ Authentication
 
 Fail if not authenticated.
 
-        @auth.push @wrap ->
-          if @session.couchdb_token?
-            @next()
-            return
-          @session.regenerate()
-          @res.writeHead 401, 'WWW-Authenticate': "Basic: realm=#{@pkg.name}"
-          @json error: 'Not authenticated'
-          @res.end()
-          return
+        @auth.push @wrap auth_required
 
 Express: Store our session in Redis so that we can offload the Socket.IO piece to a different server if needed.
 
@@ -55,6 +57,7 @@ Express: Store our session in Redis so that we can offload the Socket.IO piece t
           store: new session_store cfg.redis
           secret: cfg.session_secret
           resave: true
+          unset: 'destroy'
           saveUninitialized: true
 
 Socket.IO: allow broadcast across multiple Socket.IO servers (through Redis pub/sub).
@@ -98,11 +101,18 @@ Internal (services): these need to be able to pub/sub and proxy.
 
         @use 'cookie-parser'
 
-Use CouchDB authentication.
+Authentication
 
-        auth_module = require './couchdb-auth'
-        @include auth_module  if auth_module.include?
-        @auth = @wrap auth_module.middleware if auth_module.middleware?
+        @auth = []
+
+        for auth_name in ['./couchdb-auth']
+          auth_module = require auth_name
+          @include auth_module  if auth_module.include?
+          @auth.push @wrap auth_module.middleware if auth_module.middleware?
+
+Fail if not authenticated.
+
+        @auth.push @wrap auth_required
 
 Express: Store our session in Redis so that we can offload the Socket.IO piece to a different server if needed.
 
@@ -111,6 +121,7 @@ Express: Store our session in Redis so that we can offload the Socket.IO piece t
           store: new session_store cfg.redis
           secret: cfg.session_secret
           resave: true
+          unset: 'destroy'
           saveUninitialized: false
 
 Socket.IO: allow broadcast across multiple Socket.IO servers (through Redis pub/sub).
