@@ -39,9 +39,10 @@ Authentication
 Fail if not authenticated.
 
         @auth.push @wrap ->
-          if @session?.couchdb_token?
+          if @session.couchdb_token?
             @next()
             return
+          @session.regenerate()
           @res.writeHead 401, 'WWW-Authenticate': "Basic: realm=#{@pkg.name}"
           @json error: 'Not authenticated'
           @res.end()
