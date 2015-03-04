@@ -27,11 +27,14 @@ External (public) service.
 
         @use (require 'cookie-parser')()
 
-Use `local` authentication.
+Authentication
 
-        auth_module = require './local/auth'
-        @include auth_module  if auth_module.include?
-        @auth = @wrap auth_module.middleware if auth_module.middleware?
+        @auth = []
+
+        for auth_name in ['./local/auth','./couchdb-auth']
+          auth_module = require auth_name
+          @include auth_module  if auth_module.include?
+          @auth.push @wrap auth_module.middleware if auth_module.middleware?
 
 Express: Store our session in Redis so that we can offload the Socket.IO piece to a different server if needed.
 
