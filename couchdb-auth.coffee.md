@@ -3,12 +3,7 @@ Authenticate against CouchDB
 
     request = require 'superagent-as-promised'
 
-    @include = ->
-      @use 'cookie-parser'
-
     basic_auth = require 'basic-auth'
-
-    cfg = require './local/config.json'
 
     @middleware = ->
 
@@ -26,12 +21,7 @@ Skip if the user is not trying to authenticate using Basic.
         @next()
         return
 
-From this point on we are _the_ authentication method and might reject at will.
-
-      need_auth = =>
-        @res.writeHead 401, 'WWW-Authenticate': "Basic: realm=#{@pkg.name}"
-        @res.end()
-        return
+Try our method.
 
       request
       .get "#{@cfg.auth_base ? @cfg.proxy_base}/_session"
@@ -41,9 +31,9 @@ From this point on we are _the_ authentication method and might reject at will.
         @session.couchdb_username = body.userCtx.name
         @session.couchdb_roles = body.userCtx.roles
         @session.couchdb_token = hex_hmac_sha1 @cfg.couchdb_secret, @session.couchdb_username
-      .catch ->
-        need_auth()
-        return
+
+Do not mask errors in the remaining middlewares.
+
       .then =>
         @next()
       .catch (error) ->
