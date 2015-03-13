@@ -163,11 +163,22 @@ Socket.IO: allow broadcast across multiple Socket.IO servers (through Redis pub/
           @broadcast_to 'internal', 'notify', @data
           @broadcast_to 'everyone', 'notify', @data
 
+Messages from `docker.tough-rate/notify` (to admins)
+
         @on call: ->
           @broadcast_to 'calls', 'call', @data
+        @on report: ->
+          @broadcast_to 'calls', 'report', @data
+        @on 'statistics:add': ->
+          @broadcast_to 'calls', 'statistics:add', @data
+
+Messages to `nifty-ground`
 
         @on trace: ->
           @broadcast_to 'traces', 'trace', @data
+
+Messages from `nifty-ground` (to admins)
+
         @on trace_started: ->
           @broadcast_to 'internal', 'trace_started', @data
         @on trace_completed: ->
