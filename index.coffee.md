@@ -186,6 +186,14 @@ Messages from `nifty-ground` (to admins)
         @on trace_error: ->
           @broadcast_to 'internal', 'trace_error', @data
 
+Messages from ccnq4-opensips (to admins).
+Set the `notify` configuration parameter of ccnq4-opensips to `https://server.example.net/_notify` for full effect.
+
+        jsonBody = (require 'body-parser').json {}
+
+        @post '/_notify/:msg', jsonBody, ->
+          @broadcast_to 'internal', @params.msg, @body
+
 CouchDB reverse proxy with embedded authentication.
 
         @helper {cfg,pkg}
