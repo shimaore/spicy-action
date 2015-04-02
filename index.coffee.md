@@ -190,9 +190,10 @@ Messages from ccnq4-opensips (to admins).
 Set the `notify` configuration parameter of ccnq4-opensips to `https://server.example.net/_notify` for full effect.
 
         jsonBody = (require 'body-parser').json {}
+        internal = @io.sockets.in 'internal'
 
         @post '/_notify/:msg', jsonBody, ->
-          @broadcast_to 'internal', @params.msg, @body
+          internal.emit @params.msg, @body
           @json ok:true
 
 CouchDB reverse proxy with embedded authentication.
