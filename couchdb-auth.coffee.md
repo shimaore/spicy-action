@@ -1,7 +1,7 @@
 Authenticate against CouchDB
 ----------------------------
 
-    request = require 'superagent-as-promised'
+    request = (require 'superagent-as-promised') require 'superagent'
 
     basic_auth = require 'basic-auth'
 
