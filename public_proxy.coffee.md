@@ -1,6 +1,6 @@
     @include = ->
 
-      request = require 'superagent-as-promised'
+      request = (require 'superagent-as-promised') require 'superagent'
 
       @get '/_spicy_action', @auth, ->
         @json
