@@ -9,21 +9,7 @@
           full_name: @session.full_name
           roles: @session.couchdb_roles
 
-      make_proxy = (base) ->
-        ->
-          headers = {}
-          headers[k] = v for own k,v of @request.headers
-          headers['X-Auth-CouchDB-Roles'] = @session.couchdb_roles.join ','
-          headers['X-Auth-CouchDB-Token'] = @session.couchdb_token
-          headers['X-Auth-CouchDB-UserName'] = @session.couchdb_username
-          proxy = request @request.method, "#{base}#{@request.url}"
-            .set headers
-            .agent false
-            .redirects 0
-            .timeout 1000
-          @request.pipe proxy
-          proxy.pipe @response
-          return
+      make_couchdb_proxy = require './make_couchdb_proxy'
 
       couchdb_urls = ///
         ^ / u
@@ -35,7 +21,7 @@
         ($|/)
         ///
 
-      couchdb_proxy = make_proxy @cfg.proxy_base
+      couchdb_proxy = make_couchdb_proxy @cfg.proxy_base
       @get  couchdb_urls, @auth, couchdb_proxy
       @post couchdb_urls, @auth, couchdb_proxy
       @put  couchdb_urls, @auth, couchdb_proxy
@@ -44,7 +30,7 @@
       couchdb_urls = ///
         ^ /(provisioning|ruleset_[a-z\d_-]+)/
         ///
-      couchdb_proxy = make_proxy @cfg.provisioning_base ? @cfg.proxy_base
+      couchdb_proxy = make_couchdb_proxy @cfg.provisioning_base ? @cfg.proxy_base
       @get  '/provisioning', @auth, couchdb_proxy
       @get  '/ruleset_[a-z\d_-]+', @auth, couchdb_proxy
       @get  couchdb_urls, @auth, couchdb_proxy
@@ -57,7 +43,7 @@ Legacy tools.
       couchdb_urls = ///
         ^ /_ccnq3/
         ///
-      couchdb_proxy = make_proxy @cfg.ccnq3_base ? @cfg.proxy_base
+      couchdb_proxy = make_couchdb_proxy @cfg.ccnq3_base ? @cfg.proxy_base
       @get  couchdb_urls, @auth, couchdb_proxy
       @post couchdb_urls, @auth, couchdb_proxy
       @put  couchdb_urls, @auth, couchdb_proxy
@@ -68,18 +54,18 @@ New tools.
       couchdb_urls = ///
         ^ /tools/
         ///
-      couchdb_proxy = make_proxy @cfg.tools_base ? @cfg.proxy_base
+      couchdb_proxy = make_couchdb_proxy @cfg.tools_base ? @cfg.proxy_base
       @get  couchdb_urls, @auth, couchdb_proxy
 
       couchdb_urls = ///
         ^ /logging/
         ///
-      couchdb_proxy = make_proxy @cfg.logging_base ? @cfg.proxy_base
+      couchdb_proxy = make_couchdb_proxy @cfg.logging_base ? @cfg.proxy_base
       @get  couchdb_urls, @auth, couchdb_proxy
 
       couchdb_urls = ///
         ^ /cdrs/
         ///
-      couchdb_proxy = make_proxy @cfg.cdrs_base ? @cfg.proxy_base
+      couchdb_proxy = make_couchdb_proxy @cfg.cdrs_base ? @cfg.proxy_base
       @get  '/cdrs', @auth, couchdb_proxy
       @get  couchdb_urls, @auth, couchdb_proxy
