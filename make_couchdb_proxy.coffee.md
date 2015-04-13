@@ -4,7 +4,7 @@ Multiple-backends interface for CouchDB
       make_proxy = require './make_proxy'
 
       module.exports = make_couchdb_proxy = (bases...) ->
-        proxy = make_proxy bases
+        proxy = make_proxy bases...
         ->
           headers = {}
           headers[k] = v for own k,v of @request.headers
