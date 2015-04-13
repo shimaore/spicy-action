@@ -34,7 +34,7 @@
 
         silly = zappa silly_port, ->
 
-          proxy = make_proxy "http://127.0.1.0:#{backend_port}", "http://127.0.0.1:#{backend_port}"
+          proxy = make_proxy ["http://127.0.1.0:#{backend_port}", "http://127.0.0.1:#{backend_port}"]
           @get /./, ->
             proxy.call this, @request.headers
 

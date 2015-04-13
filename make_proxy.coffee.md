@@ -1,6 +1,10 @@
       request = require 'request'
+      util = require 'util'
 
       module.exports = make_proxy = (bases...) ->
+
+        if bases[0]? and util.isArray bases[0]
+          bases = bases[0]
 
         (headers) ->
 
