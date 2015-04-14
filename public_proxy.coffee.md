@@ -68,4 +68,6 @@ New tools.
         ///
       couchdb_proxy = make_couchdb_proxy @cfg.cdrs_base ? @cfg.proxy_base
       @get  '/cdrs', @auth, couchdb_proxy
+      @post '/cdrs/_all_docs', @auth, couchdb_proxy
+      @post /// ^ /cdrs/_design/\w+/_view ///, @auth, couchdb_proxy
       @get  couchdb_urls, @auth, couchdb_proxy
