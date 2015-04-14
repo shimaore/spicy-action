@@ -28,6 +28,9 @@ External (public) service.
 
       zappa cfg.public_host, cfg.public_port, https:cfg.ssl, ->
 
+        @helper {cfg,pkg}
+        @cfg = cfg
+
         @get '/', ->
           @json
             ok:true
@@ -89,8 +92,6 @@ Local pub/sub logic.
 
 CouchDB reverse proxy with embedded authentication.
 
-        @helper {cfg,pkg}
-        @cfg = cfg
         @include './public_proxy'
 
 Other local services.
@@ -101,6 +102,9 @@ Internal (services): these need to be able to pub/sub and proxy.
 --------------------
 
       zappa cfg.internal_host, cfg.internal_port, ->
+
+        @helper {cfg,pkg}
+        @cfg = cfg
 
         @use 'cookie-parser'
 
@@ -130,8 +134,6 @@ Express: Store our session in Redis so that we can offload the Socket.IO piece t
 Socket.IO: allow broadcast across multiple Socket.IO servers (through Redis pub/sub).
 
         @io.adapter redis cfg.redis
-
-        @helper {cfg,pkg}
 
         @get '/', ->
           @json
@@ -198,8 +200,6 @@ Set the `notify` configuration parameter of ccnq4-opensips to `https://server.ex
 
 CouchDB reverse proxy with embedded authentication.
 
-        @helper {cfg,pkg}
-        @cfg = cfg
         @include './public_proxy'
 
 Other local services.
