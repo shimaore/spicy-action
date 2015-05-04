@@ -1,11 +1,13 @@
     request = (require 'superagent-as-promised') require 'superagent'
     zappa  = require 'zappajs'
+    Promise = require 'bluebird'
     chai = require 'chai'
     chai.should()
 
     describe 'Failover', ->
       port = 8088
       missing_port = port++
+      failing_port = port++
       backend_port = port++
       frontend_port = port++
       silly_port = port++
@@ -24,6 +26,59 @@
           @get '/bar/foo', ->
             @json bar:true
 
+          @get '/hang', ->
+            @json hung:true
+
+          @get '/too-slow', ->
+            @json hung:true
+
+          @get '/headers-but-slow', ->
+            @json hung:true
+
+        failing_backend = zappa failing_port, ->
+
+Just hang.
+
+          @get '/hang', ->
+
+Provide the answer before timeout.
+
+          @get '/slow', ->
+            Promise.delay 1023
+            .then =>
+              @json slow:true
+
+          @get '/too-slow', ->
+            Promise.delay 4000
+            .then =>
+              @json slow:true
+
+          @get '/headers-but-slow', ->
+            @res.writeHead 200, 'Content-Type':'application/json'
+            Promise.delay 500
+            .then =>
+              @res.write '{'
+            .then =>
+              Promise.delay 1700
+            .then =>
+              @res.write '"to'
+            .then =>
+              Promise.delay 1700
+            .then =>
+              @res.write 'o":'
+            .then =>
+              Promise.delay 1700
+            .then =>
+              @res.write 'tru'
+            .then =>
+              Promise.delay 1700
+            .then =>
+              @res.write 'e}'
+            .then =>
+              Promise.delay 1700
+            .then =>
+              @res.end()
+
         make_proxy = require '../make_proxy'
 
         frontend = zappa frontend_port, ->
@@ -34,7 +89,7 @@
 
         silly = zappa silly_port, ->
 
-          proxy = make_proxy ["http://127.0.1.0:#{backend_port}", "http://127.0.0.1:#{backend_port}"]
+          proxy = make_proxy ["http://127.0.1.0:#{failing_port}", "http://127.0.0.1:#{backend_port}"]
           @get /./, ->
             proxy.call this, @request.headers
 
@@ -45,12 +100,57 @@
         .then ({body}) ->
           body.should.have.property 'ok', true
 
-      it 'should failover on service timeout', ->
+      it 'should wait before service timeout', ->
+        @timeout 3000
+        start = Date.now()
         request
-        .get "http://127.0.0.1:#{silly_port}"
+        .get "http://127.0.0.1:#{silly_port}/slow"
         .accept 'json'
         .then ({body}) ->
-          body.should.have.property 'ok', true
+          body.should.have.property 'slow', true
+          end = Date.now()
+          duration = end-start
+          chai.expect(duration).to.be.at.least 1000
+          chai.expect(duration).to.be.at.most 1500
+
+      it 'should wait on slow response', ->
+        @timeout 3000
+        start = Date.now()
+        request
+        .get "http://127.0.0.1:#{silly_port}/too-slow"
+        .accept 'json'
+        .then ({body}) ->
+          body.should.have.property 'hung', true
+          end = Date.now()
+          duration = end-start
+          chai.expect(duration).to.be.at.least 1500
+          chai.expect(duration).to.be.at.most 2500
+
+      it 'should failover on hung body', ->
+        @timeout 10000
+        start = Date.now()
+        request
+        .get "http://127.0.0.1:#{silly_port}/headers-but-slow"
+        .accept 'json'
+        .then ({body}) ->
+          body.should.have.property 'too', true
+          end = Date.now()
+          duration = end-start
+          chai.expect(duration).to.be.at.least 8700
+          chai.expect(duration).to.be.at.most 9700
+
+      it 'should failover on service timeout', ->
+        @timeout 3000
+        start = Date.now()
+        request
+        .get "http://127.0.0.1:#{silly_port}/hang"
+        .accept 'json'
+        .then ({body}) ->
+          body.should.have.property 'hung', true
+          end = Date.now()
+          duration = end-start
+          chai.expect(duration).to.be.at.least 1500
+          chai.expect(duration).to.be.at.most 2500
 
       it 'should handle paths', ->
         request
