@@ -45,7 +45,7 @@ Skip `null` entries
             followRedirects: false # .redirects 0
             maxRedirects: 0
             strictSSL: false # .agent false
-            timeout: timeout
+            timeout: module.exports.timeout
 
 Initial request attempt to the first backed: pipe the request to the server.
 In case of error (assuming network error, hence the request was not piped yet), attempt to pipe to the failover server (if any).
