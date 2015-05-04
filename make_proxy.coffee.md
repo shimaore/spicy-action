@@ -1,7 +1,7 @@
       request = require 'request'
       util = require 'util'
 
-      module.exports = make_proxy = (bases...) ->
+      make_proxy = (bases...) ->
 
         if bases[0]? and util.isArray bases[0]
           bases = bases[0]
@@ -45,7 +45,7 @@ Skip `null` entries
               followRedirects: false # .redirects 0
               maxRedirects: 0
               strictSSL: false # .agent false
-              timeout: 1000
+              timeout: timeout
 
 Initial request attempt to the first backed: pipe the request to the server.
 In case of error (assuming network error, hence the request was not piped yet), attempt to pipe to the failover server (if any).
@@ -64,3 +64,6 @@ We do not catch errors on the response: it's too late anyhow.
 
           failover 0, new Error 'No backend available'
           return
+
+      module.exports = make_proxy
+      module.exports.timeout = process.env.TIMEOUT ? 2000
