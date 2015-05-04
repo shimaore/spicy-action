@@ -11,6 +11,7 @@
       backend_port = port++
       frontend_port = port++
       silly_port = port++
+      crazy_port = port++
 
       backend = frontend = silly = null
 
@@ -49,7 +50,7 @@ Provide the answer before timeout.
               @json slow:true
 
           @get '/too-slow', ->
-            Promise.delay 4000
+            Promise.delay 8000
             .then =>
               @json slow:true
 
@@ -90,6 +91,12 @@ Provide the answer before timeout.
         silly = zappa silly_port, ->
 
           proxy = make_proxy ["http://127.0.1.0:#{failing_port}", "http://127.0.0.1:#{backend_port}"]
+          @get /./, ->
+            proxy.call this, @request.headers
+
+        crazy = zappa crazy_port, ->
+
+          proxy = make_proxy ["http://127.0.1.0:#{failing_port}"]
           @get /./, ->
             proxy.call this, @request.headers
 
@@ -151,6 +158,19 @@ Provide the answer before timeout.
           duration = end-start
           chai.expect(duration).to.be.at.least 1500
           chai.expect(duration).to.be.at.most 2500
+
+      it 'should wait on slow body which is last', ->
+        @timeout 10000
+        start = Date.now()
+        request
+        .get "http://127.0.0.1:#{crazy_port}/too-slow"
+        .accept 'json'
+        .then ({body}) ->
+          body.should.have.property 'slow', true
+          end = Date.now()
+          duration = end-start
+          chai.expect(duration).to.be.at.least 7500
+          chai.expect(duration).to.be.at.most 8500
 
       it 'should handle paths', ->
         request

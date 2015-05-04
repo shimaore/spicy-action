@@ -38,6 +38,11 @@ Skip `null` entries
 
           url = "#{base}#{@request.url}"
 
+          if index < bases.length
+            timeout = module.exports.timeout
+          else
+            timeout = module.exports.last_timeout
+
           proxy = request
             method: @request.method
             url: url
@@ -45,7 +50,7 @@ Skip `null` entries
             followRedirects: false # .redirects 0
             maxRedirects: 0
             strictSSL: false # .agent false
-            timeout: module.exports.timeout
+            timeout: timeout
 
 Initial request attempt to the first backed: pipe the request to the server.
 In case of error (assuming network error, hence the request was not piped yet), attempt to pipe to the failover server (if any).
@@ -67,3 +72,4 @@ We do not catch errors on the response: it's too late anyhow.
 
     module.exports = make_proxy
     module.exports.timeout = process.env.TIMEOUT ? 2000
+    module.exports.last_timeout = process.env.LAST_TIMEOUT ? 100000
