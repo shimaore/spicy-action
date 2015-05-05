@@ -1,14 +1,31 @@
-FROM shimaore/nodejs:0.10.36
+FROM shimaore/debian
 MAINTAINER Stéphane Alnet <stephane@shimaore.net>
 
+#-------------------#
 USER root
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  build-essential \
+  ca-certificates \
+  curl \
+  git \
+  make \
+  supervisor
+# Install Node.js using `n`.
+RUN git clone https://github.com/tj/n.git
+WORKDIR n
+RUN make install
+WORKDIR ..
+RUN n io 1.8.1
+ENV NODE_ENV production
+
+#-------------------#
+
 RUN useradd -m spicy
 COPY . /home/spicy/spicy-action
 RUN chown -R spicy.spicy /home/spicy
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-  supervisor
-
+#-------------------#
 USER spicy
 WORKDIR /home/spicy/spicy-action
 RUN mkdir log
