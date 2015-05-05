@@ -22,10 +22,10 @@
     "mocha": "^2.2.4"
   },
   "scripts": {
+    "prepublish": "coffee -c -m *.coffee.md",
     "pretest": "npm install",
     "test": "mocha"
   },
   "author": "Stéphane Alnet <stephane@shimaore.net> (http://stephane.shimaore.net/)",
-  "license": "Unlicense (http://unlicense.org/)",
-  "private": true
+  "license": "Unlicense (http://unlicense.org/)"
 }
