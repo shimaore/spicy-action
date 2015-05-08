@@ -1,7 +1,7 @@
 {
   "name": "spicy-action",
   "version": "3.0.0",
-  "description": "",
+  "description": "HTTP(S) proxy & Socket.IO relay for CouchDB and others",
   "main": "index.js",
   "dependencies": {
     "basic-auth": "^1.0.0",
@@ -27,5 +27,21 @@
     "test": "mocha"
   },
   "author": "Stéphane Alnet <stephane@shimaore.net> (http://stephane.shimaore.net/)",
-  "license": "Unlicense (http://unlicense.org/)"
+  "license": "Unlicense (http://unlicense.org/)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shimaore/spicy-action.git"
+  },
+  "bugs": {
+    "url": "https://github.com/shimaore/spicy-action/issues"
+  },
+  "homepage": "https://github.com/shimaore/spicy-action",
+  "directories": {
+    "test": "test"
+  },
+  "keywords": [
+    "proxy",
+    "Socket.IO",
+    "CouchDB"
+  ]
 }
