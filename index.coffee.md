@@ -180,9 +180,13 @@ Messages to `nifty-ground`
 
         @on trace: ->
           @broadcast_to 'traces', 'trace', @data
+        @on ping: ->
+          @broadcast_to 'traces', 'ping', @data
 
 Messages from `nifty-ground` (to admins)
 
+        @on pong: ->
+          @broadcast_to 'internal', 'pong', @data
         @on trace_started: ->
           @broadcast_to 'internal', 'trace_started', @data
         @on trace_completed: ->
