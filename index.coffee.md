@@ -25,8 +25,8 @@ This is also a Socket.IO server for external users, allowing the propagation of 
         @res.end()
         return
 
-External (public) service.
--------------------------
+External (public) service
+=========================
 
       zappa cfg.public_host, cfg.public_port, https:cfg.ssl, ->
 
@@ -101,7 +101,7 @@ Other local services.
         @include './local/public'
 
 Internal (services): these need to be able to pub/sub and proxy.
---------------------
+====================
 
       zappa cfg.internal_host, cfg.internal_port, ->
 
@@ -163,11 +163,15 @@ Socket.IO: allow broadcast across multiple Socket.IO servers (through Redis pub/
         @on shout: ->
           @broadcast_to 'internal', shouted: {@id,@data}
 
+Public customer notification
+----------------------------
+
         @on notify_users: ->
           @broadcast_to 'internal', 'notify', @data
           @broadcast_to 'everyone', 'notify', @data
 
 Messages from `docker.tough-rate/notify` (to admins)
+----------------------------------------------------
 
         @on call: ->
           @broadcast_to 'calls', 'call', @data
@@ -176,7 +180,8 @@ Messages from `docker.tough-rate/notify` (to admins)
         @on 'statistics:add': ->
           @broadcast_to 'calls', 'statistics:add', @data
 
-Messages to `nifty-ground`
+Messages to `nifty-ground` clients
+----------------------------------
 
         @on trace: ->
           @broadcast_to 'traces', 'trace', @data
@@ -184,6 +189,7 @@ Messages to `nifty-ground`
           @broadcast_to 'traces', 'ping', @data
 
 Messages from `nifty-ground` (to admins)
+----------------------------------------
 
         @on pong: ->
           @broadcast_to 'internal', 'pong', @data
@@ -195,6 +201,8 @@ Messages from `nifty-ground` (to admins)
           @broadcast_to 'internal', 'trace_error', @data
 
 Messages from ccnq4-opensips (to admins).
+-----------------------------------------
+
 Set the `notify` configuration parameter of ccnq4-opensips to `https://server.example.net/_notify` for full effect.
 
         jsonBody = (require 'body-parser').json {}
