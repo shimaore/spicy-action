@@ -8,7 +8,7 @@ This is also a Socket.IO server for external users, allowing the propagation of 
     run = ->
       cfg = require process.env.CONFIG ? './local/config.json'
       pkg = require './package.json'
-      cuddly = (require 'cuddly') "#{pkg.name}:index"
+      Cuddly = require 'cuddly'
 
       zappa = require 'zappajs'
 
@@ -173,7 +173,7 @@ Socket.IO: allow broadcast across multiple Socket.IO servers (through Redis pub/
 Support-class messages
 ----------------------
 
-        for event in cuddly.events
+        for event in Cuddly.events
           @on event, ->
             @broadcast_to 'support', event, @data
 
