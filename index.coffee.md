@@ -8,6 +8,7 @@ This is also a Socket.IO server for external users, allowing the propagation of 
     run = ->
       cfg = require process.env.CONFIG ? './local/config.json'
       pkg = require './package.json'
+      cuddly = (require 'cuddly') "#{pkg.name}:index"
 
       zappa = require 'zappajs'
 
@@ -86,6 +87,7 @@ Local pub/sub logic.
           if @session.admin
             @join 'internal'
             @join 'calls'
+            @join 'support'
           @emit ready: roles:@session.couchdb_roles
 
         @on trace: ->
@@ -159,9 +161,21 @@ Socket.IO: allow broadcast across multiple Socket.IO servers (through Redis pub/
               @join 'calls'
             when false
               @leave 'calls'
+          switch @data.support
+            when true
+              @join 'support'
+            when false
+              @leave 'support'
 
         @on shout: ->
           @broadcast_to 'internal', shouted: {@id,@data}
+
+Support-class messages
+----------------------
+
+        for event in cuddly.events
+          @on event, ->
+            @broadcast_to 'support', event, @data
 
 Public customer notification
 ----------------------------
@@ -175,8 +189,6 @@ Messages from `docker.tough-rate/notify` (to admins)
 
         @on call: ->
           @broadcast_to 'calls', 'call', @data
-        @on report: ->
-          @broadcast_to 'calls', 'report', @data
         @on 'statistics:add': ->
           @broadcast_to 'calls', 'statistics:add', @data
 
