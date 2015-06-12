@@ -1,4 +1,4 @@
-FROM shimaore/debian
+FROM shimaore/debian:2.0.0
 MAINTAINER Stéphane Alnet <stephane@shimaore.net>
 
 #-------------------#
