@@ -4,23 +4,23 @@
   "description": "HTTP(S) proxy & Socket.IO relay for CouchDB and others",
   "main": "index.js",
   "dependencies": {
-    "basic-auth": "^1.0.0",
-    "body-parser": "^1.12.3",
+    "basic-auth": "^1.0.3",
+    "body-parser": "^1.13.1",
     "connect-redis": "^2.3.0",
-    "cookie-parser": "^1.3.4",
-    "cuddly": "^1.1.0",
-    "request": "^2.55.0",
+    "cookie-parser": "^1.3.5",
+    "cuddly": "^1.1.3",
+    "request": "^2.58.0",
     "socket.io-client": "^1.3.5",
     "socket.io-redis": "^0.1.4",
     "superagent": "^1.2.0",
     "superagent-as-promised": "^3.1.1",
-    "zappajs": "^2.1.2"
+    "zappajs": "^2.2.0"
   },
   "devDependencies": {
-    "bluebird": "^2.9.25",
-    "chai": "^2.3.0",
-    "coffee-script": "^1.9.2",
-    "mocha": "^2.2.4"
+    "bluebird": "^2.9.31",
+    "chai": "^3.0.0",
+    "coffee-script": "^1.9.3",
+    "mocha": "^2.2.5"
   },
   "scripts": {
     "prepublish": "coffee -c -m *.coffee.md",
