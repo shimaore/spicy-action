@@ -228,6 +228,9 @@ Set the `notify` configuration parameter of ccnq4-opensips to `https://server.ex
           internal.emit @params.msg, @body
           @json ok:true
 
+        @on location: ->
+          @broadcast_to 'internal', 'location', @data
+
 CouchDB reverse proxy with embedded authentication.
 
         @include './public_proxy'
