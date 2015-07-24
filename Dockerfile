@@ -16,7 +16,7 @@ RUN git clone https://github.com/tj/n.git
 WORKDIR n
 RUN make install
 WORKDIR ..
-RUN n io 1.8.1
+RUN n io 2.4.0
 ENV NODE_ENV production
 
 #-------------------#
