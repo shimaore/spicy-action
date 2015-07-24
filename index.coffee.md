@@ -31,6 +31,8 @@ External (public) service
 
       zappa cfg.public_host, cfg.public_port, https:cfg.ssl, ->
 
+        @use morgan:'combined'
+
         @helper {cfg,pkg}
         @cfg = cfg
 
@@ -106,6 +108,8 @@ Internal (services): these need to be able to pub/sub and proxy.
 ====================
 
       zappa cfg.internal_host, cfg.internal_port, ->
+
+        @use morgan:'combined'
 
         @helper {cfg,pkg}
         @cfg = cfg
