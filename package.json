@@ -15,7 +15,7 @@
     "socket.io-redis": "^0.1.4",
     "superagent": "^1.2.0",
     "superagent-as-promised": "^3.1.1",
-    "zappajs": "^2.2.0"
+    "zappajs": "^3.0.0"
   },
   "devDependencies": {
     "bluebird": "^2.9.31",
@@ -29,7 +29,7 @@
     "test": "mocha"
   },
   "author": "Stéphane Alnet <stephane@shimaore.net> (http://stephane.shimaore.net/)",
-  "license": "Unlicense (http://unlicense.org/)",
+  "license": "Unlicense",
   "repository": {
     "type": "git",
     "url": "https://github.com/shimaore/spicy-action.git"
