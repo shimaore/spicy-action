@@ -96,6 +96,14 @@ Local pub/sub logic.
           if @session.admin
             @broadcast_to 'traces', 'trace', @data
 
+        @on location: ->
+          if @session.admin
+            @broadcast_to 'locations', 'location', @data
+
+        @on locations: ->
+          if @session.admin
+            @broadcast_to 'locations', 'locations', @data
+
 CouchDB reverse proxy with embedded authentication.
 
         @include './public_proxy'
@@ -170,6 +178,11 @@ Socket.IO: allow broadcast across multiple Socket.IO servers (through Redis pub/
               @join 'support'
             when false
               @leave 'support'
+          switch @data.locations
+            when true
+              @join 'locations'
+            when false
+              @leave 'locations'
 
         @on shout: ->
           @broadcast_to 'internal', shouted: {@id,@data}
