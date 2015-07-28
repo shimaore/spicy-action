@@ -19,3 +19,5 @@ tests:
 push: image tests
 	docker push ${REGISTRY}/${NAME}:${TAG}
 	docker push ${NAME}:${TAG}
+	docker rmi ${REGISTRY}/${NAME}:${TAG}
+	docker rmi ${NAME}:${TAG}
