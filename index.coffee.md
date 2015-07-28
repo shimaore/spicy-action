@@ -96,6 +96,8 @@ Local pub/sub logic.
           if @session.admin
             @broadcast_to 'traces', 'trace', @data
 
+Message towards `ccnq4-opensips`
+
         @on location: ->
           if @session.admin
             @broadcast_to 'locations', 'location', @data
@@ -178,6 +180,9 @@ Socket.IO: allow broadcast across multiple Socket.IO servers (through Redis pub/
               @join 'support'
             when false
               @leave 'support'
+
+The `locations` bus is subscribed by the ccnq4-opensips servers.
+
           switch @data.locations
             when true
               @join 'locations'
@@ -241,8 +246,23 @@ Set the `notify` configuration parameter of ccnq4-opensips to `https://server.ex
           internal.emit @params.msg, @body
           @json ok:true
 
+Messages towards `ccnq4-opensips`
+---------------------------------
+
         @on location: ->
-          @broadcast_to 'internal', 'location', @data
+          @broadcast_to 'locations', 'location', @data
+        @on locations: ->
+          @broadcast_to 'locations', 'locations', @data
+
+Messages from ccnq4-opensips (to admins)
+----------------------------------------
+
+        @on 'location:update': ->
+          @broadcast_to 'internal', 'location:update', @data
+        @on 'location:response': ->
+          @broadcast_to 'internal', 'location:response', @data
+        @on 'locations:response': ->
+          @broadcast_to 'internal', 'locations:response', @data
 
 CouchDB reverse proxy with embedded authentication.
 
