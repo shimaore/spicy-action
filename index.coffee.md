@@ -92,11 +92,13 @@ Local pub/sub logic.
             @join 'support'
           @emit ready: roles:@session.couchdb_roles
 
+Message towards `nifty-ground`
+
         @on trace: ->
           if @session.admin
             @broadcast_to 'traces', 'trace', @data
 
-Message towards `ccnq4-opensips`
+Messages towards `ccnq4-opensips`
 
         @on location: ->
           if @session.admin
@@ -105,6 +107,13 @@ Message towards `ccnq4-opensips`
         @on locations: ->
           if @session.admin
             @broadcast_to 'locations', 'locations', @data
+
+Inventory
+
+        @on ping: ->
+          if @session.admin
+            @broadcast_to 'traces', 'ping', @data
+            @broadcast_to 'locations', 'ping', @data
 
 CouchDB reverse proxy with embedded authentication.
 
@@ -162,26 +171,18 @@ Socket.IO: allow broadcast across multiple Socket.IO servers (through Redis pub/
 
         @on connection: ->
           @emit welcome: {@id}
-          @join 'internal'
 
         @on configure: ->
+
+The `traces` bus is subscribed by the `nifty-ground` servers.
+
           switch @data.traces
             when true
               @join 'traces'
             when false
               @leave 'traces'
-          switch @data.calls
-            when true
-              @join 'calls'
-            when false
-              @leave 'calls'
-          switch @data.support
-            when true
-              @join 'support'
-            when false
-              @leave 'support'
 
-The `locations` bus is subscribed by the ccnq4-opensips servers.
+The `locations` bus is subscribed by the `ccnq4-opensips` servers.
 
           switch @data.locations
             when true
@@ -189,8 +190,35 @@ The `locations` bus is subscribed by the ccnq4-opensips servers.
             when false
               @leave 'locations'
 
+These are normally directed at admins, but might be used by notifications tools (e.g. notification-to-email tools).
+
+          switch @data.internal
+            when true
+              @join 'internal'
+            when false
+              @leave 'internal'
+
+          switch @data.calls
+            when true
+              @join 'calls'
+            when false
+              @leave 'calls'
+
+          switch @data.support
+            when true
+              @join 'support'
+            when false
+              @leave 'support'
+
         @on shout: ->
           @broadcast_to 'internal', shouted: {@id,@data}
+
+List servers that respond
+-------------------------
+
+        @on ping: ->
+          @broadcast_to 'traces', 'ping', @data
+          @broadcast_to 'locations', 'ping', @data
 
 Support-class messages
 ----------------------
@@ -219,8 +247,6 @@ Messages to `nifty-ground` clients
 
         @on trace: ->
           @broadcast_to 'traces', 'trace', @data
-        @on ping: ->
-          @broadcast_to 'traces', 'ping', @data
 
 Messages from `nifty-ground` (to admins)
 ----------------------------------------
