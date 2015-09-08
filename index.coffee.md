@@ -79,7 +79,7 @@ Local pub/sub logic.
 
         @on connection: ->
           @join 'public' # No authentication required
-          @emit welcome: {@id}
+          @emit welcome: {@id,name:pkg.name,version:pkg.version,public:true}
 
         @on join: ->
           unless @session?.couchdb_username?
@@ -170,7 +170,7 @@ Socket.IO: allow broadcast across multiple Socket.IO servers (through Redis pub/
             local:(require './local/package.json').version
 
         @on connection: ->
-          @emit welcome: {@id}
+          @emit welcome: {@id,name:pkg.name,version:pkg.version,public:false}
 
         @on configure: ->
 
