@@ -5,8 +5,7 @@ This is an authentication proxy for CouchDB, using a custom (cookie-session-base
 
 This is also a Socket.IO server for external users, allowing the propagation of events to users, and for internal (services) users, allowing the generation of events. In other words this is an event broker.
 
-    run = ->
-      cfg = require process.env.CONFIG ? './local/config.json'
+    run = (cfg) ->
       pkg = require './package.json'
       Cuddly = require 'cuddly'
 
@@ -210,6 +209,8 @@ These are normally directed at admins, but might be used by notifications tools 
             when false
               @leave 'support'
 
+          @emit configured: @data
+
         @on shout: ->
           @broadcast_to 'internal', shouted: {@id,@data}
 
@@ -298,4 +299,7 @@ Other local services.
 
         @include './local/public'
 
-    run()
+    module.exports = run
+    if require.main is module
+      cfg = require process.env.CONFIG ? './local/config.json'
+      run cfg
