@@ -280,6 +280,8 @@ Messages towards `ccnq4-opensips`
           @broadcast_to 'locations', 'location', @data
         @on locations: ->
           @broadcast_to 'locations', 'locations', @data
+        @on registrants: ->
+          @broadcast_to 'locations', 'registrants', @data
 
 Messages from ccnq4-opensips (to admins)
 ----------------------------------------
@@ -290,6 +292,8 @@ Messages from ccnq4-opensips (to admins)
           @broadcast_to 'internal', 'location:response', @data
         @on 'locations:response': ->
           @broadcast_to 'internal', 'locations:response', @data
+        @on 'registrants:response': ->
+          @broadcast_to 'internal', 'registrants:response', @data
 
 CouchDB reverse proxy with embedded authentication.
 
