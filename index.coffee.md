@@ -173,43 +173,22 @@ Socket.IO: allow broadcast across multiple Socket.IO servers (through Redis pub/
 
         @on configure: ->
 
-The `traces` bus is subscribed by the `nifty-ground` servers.
-
-          switch @data.traces
-            when true
-              @join 'traces'
-            when false
-              @leave 'traces'
-
-The `locations` bus is subscribed by the `ccnq4-opensips` servers.
-
-          switch @data.locations
-            when true
-              @join 'locations'
-            when false
-              @leave 'locations'
-
-These are normally directed at admins, but might be used by notifications tools (e.g. notification-to-email tools).
-
-          switch @data.internal
-            when true
-              @join 'internal'
-            when false
-              @leave 'internal'
-
-          switch @data.calls
-            when true
-              @join 'calls'
-            when false
-              @leave 'calls'
-
-          switch @data.support
-            when true
-              @join 'support'
-            when false
-              @leave 'support'
+          for bus in [
+            'calls'
+            'internal'
+            'locations'
+            'support'
+            'traces'
+          ]
+            do (bus) =>
+              switch @data[bus]
+                when true
+                  @join bus
+                when false
+                  @leave bus
 
           @emit configured: @data
+
 
         @on shout: ->
           @broadcast_to 'internal', shouted: {@id,@data}
