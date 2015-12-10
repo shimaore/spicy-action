@@ -216,13 +216,6 @@ List servers that respond
           to.traces.emit 'ping', @data
           to.locations.emit 'ping', @data
 
-Support-class messages
-----------------------
-
-        for event in Cuddly.events
-          @on event, ->
-            @broadcast_to 'support', event, @data
-
 Public customer notification
 ----------------------------
 
@@ -230,31 +223,37 @@ Public customer notification
           to.internal.emit 'notify', @data
           to.everyone.emit 'notify', @data
 
+Internally mappable services
+----------------------------
+
+`handler` maps an event to a target bus on which it is broadcast.
+
+        handler = {}
+
+Support-class messages
+----------------------
+
+        for event in Cuddly.events
+          handler[event] = to.support
+
 Messages from `docker.tough-rate/notify` (to admins)
 ----------------------------------------------------
 
-        @on call: ->
-          @broadcast_to 'calls', 'call', @data
-        @on 'statistics:add': ->
-          @broadcast_to 'calls', 'statistics:add', @data
+        handler.call = to.calls
+        handler['statistics:add'] = to.calls
 
 Messages to `nifty-ground` clients
 ----------------------------------
 
-        @on trace: ->
-          @broadcast_to 'traces', 'trace', @data
+        handler.trace = to.traces
 
 Messages from `nifty-ground` (to admins)
 ----------------------------------------
 
-        @on pong: ->
-          @broadcast_to 'internal', 'pong', @data
-        @on trace_started: ->
-          @broadcast_to 'internal', 'trace_started', @data
-        @on trace_completed: ->
-          @broadcast_to 'internal', 'trace_completed', @data
-        @on trace_error: ->
-          @broadcast_to 'internal', 'trace_error', @data
+        handler.pong = to.internal
+        handler.trace_started = to.internal
+        handler.trace_completed = to.internal
+        handler.trace_error = to.internal
 
 Messages from ccnq4-opensips (to admins).
 -----------------------------------------
@@ -262,33 +261,37 @@ Messages from ccnq4-opensips (to admins).
 Set the `notify` configuration parameter of ccnq4-opensips to `https://server.example.net/_notify` for full effect.
 
         jsonBody = (require 'body-parser').json {}
-        internal = @io.sockets.in 'internal'
 
         @post '/_notify/:msg', jsonBody, ->
-          internal.emit @params.msg, @body
+          msg = @params.msg
+          unless handler[msg]?
+            @json ok:false, ignore:true
+            return
+
+          handler[msg].emit msg, @body
           @json ok:true
 
 Messages towards `ccnq4-opensips`
 ---------------------------------
 
-        @on location: ->
-          @broadcast_to 'locations', 'location', @data
-        @on locations: ->
-          @broadcast_to 'locations', 'locations', @data
-        @on registrants: ->
-          @broadcast_to 'locations', 'registrants', @data
+        handler.location = to.locations
+        handler.locations = to.locations
+        handler.registrants = to.locations
 
 Messages from ccnq4-opensips (to admins)
 ----------------------------------------
 
-        @on 'location:update': ->
-          @broadcast_to 'internal', 'location:update', @data
-        @on 'location:response': ->
-          @broadcast_to 'internal', 'location:response', @data
-        @on 'locations:response': ->
-          @broadcast_to 'internal', 'locations:response', @data
-        @on 'registrants:response': ->
-          @broadcast_to 'internal', 'registrants:response', @data
+        handler['location:update'] = to.internal
+        handler['location:response'] = to.internal
+        handler['locations:response'] = to.internal
+        handler['registrants:response'] = to.internal
+
+Register events
+---------------
+
+        for event, r of handler
+          @on event, ->
+            r.emit event, @data
 
 CouchDB reverse proxy with embedded authentication.
 
