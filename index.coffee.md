@@ -189,16 +189,32 @@ Socket.IO: allow broadcast across multiple Socket.IO servers (through Redis pub/
 
           @emit configured: @data
 
+Rooms/busses
+------------
+
+The `traces` bus is subscribed by the `nifty-ground` servers.
+The `locations` bus is subscribed by the `ccnq4-opensips` servers.
+These are normally directed at admins, but might be used by notifications tools (e.g. notification-to-email tools).
+
+        to = {}
+        to[r] = @io.sockets.in r for r in [
+          'calls'
+          'everyone'
+          'internal'
+          'locations'
+          'support'
+          'traces'
+        ]
 
         @on shout: ->
-          @broadcast_to 'internal', shouted: {@id,@data}
+          to.internal.emit 'shouted', {@id,@data}
 
 List servers that respond
 -------------------------
 
         @on ping: ->
-          @broadcast_to 'traces', 'ping', @data
-          @broadcast_to 'locations', 'ping', @data
+          to.traces.emit 'ping', @data
+          to.locations.emit 'ping', @data
 
 Support-class messages
 ----------------------
@@ -211,8 +227,8 @@ Public customer notification
 ----------------------------
 
         @on notify_users: ->
-          @broadcast_to 'internal', 'notify', @data
-          @broadcast_to 'everyone', 'notify', @data
+          to.internal.emit 'notify', @data
+          to.everyone.emit 'notify', @data
 
 Messages from `docker.tough-rate/notify` (to admins)
 ----------------------------------------------------
