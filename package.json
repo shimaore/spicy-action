@@ -1,6 +1,6 @@
 {
   "name": "spicy-action",
-  "version": "4.9.1-0",
+  "version": "4.9.1-1",
   "description": "HTTP(S) proxy & Socket.IO relay for CouchDB and others",
   "main": "index.js",
   "dependencies": {
