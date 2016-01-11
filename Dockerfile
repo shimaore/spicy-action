@@ -1,21 +1,21 @@
-FROM shimaore/debian:2.0.3
+FROM shimaore/debian:2.0.4
 MAINTAINER Stéphane Alnet <stephane@shimaore.net>
 
 #-------------------#
 USER root
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-  build-essential \
   ca-certificates \
   curl \
   git \
   make \
   supervisor
 # Install Node.js using `n`.
-RUN git clone https://github.com/tj/n.git \
- && cd n \
+RUN git clone https://github.com/tj/n.git n.git \
+ && cd n.git \
  && make install \
  && cd .. \
+ && rm -rf n.git
  && n 4.2.4
 ENV NODE_ENV production
 
@@ -31,6 +31,7 @@ WORKDIR /home/spicy/spicy-action
 RUN mkdir log
 RUN npm install \
  && npm install coffee-script \
- && npm cache clean
+ && npm cache clean \
+ && rm -rf /tmp/npm*
 
 CMD ["supervisord","-n"]
