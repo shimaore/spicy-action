@@ -290,7 +290,7 @@ Register events
 ---------------
 
         for event, r of handler
-          do (event,r) ->
+          do (event,r) =>
             @on event, ->
               r.emit event, @data
 
