@@ -290,8 +290,9 @@ Register events
 ---------------
 
         for event, r of handler
-          @on event, ->
-            r.emit event, @data
+          do (event,r) ->
+            @on event, ->
+              r.emit event, @data
 
 CouchDB reverse proxy with embedded authentication.
 
