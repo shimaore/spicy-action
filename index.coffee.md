@@ -28,6 +28,10 @@ This is also a Socket.IO server for external users, allowing the propagation of 
 External (public) service
 =========================
 
+      cfg.ssl ?= {}
+      cfg.ssl.key  ?= fs.readFileSync cfg.ssl.key_file, 'utf-8'  if cfg.ssl.key_file?
+      cfg.ssl.cert ?= fs.readFileSync cfg.ssl.cert_file, 'utf-8' if cfg.ssl.cert_file?
+
       zappa cfg.public_host, cfg.public_port, https:cfg.ssl, ->
 
         @use morgan:'combined'
