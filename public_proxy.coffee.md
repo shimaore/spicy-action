@@ -38,17 +38,6 @@
       @put  couchdb_urls, @auth, couchdb_proxy
       @delete couchdb_urls, @auth, couchdb_proxy
 
-Legacy tools.
-
-      couchdb_urls = ///
-        ^ /_ccnq3/
-        ///
-      couchdb_proxy = make_couchdb_proxy @cfg.ccnq3_base ? @cfg.proxy_base
-      @get  couchdb_urls, @auth, couchdb_proxy
-      @post couchdb_urls, @auth, couchdb_proxy
-      @put  couchdb_urls, @auth, couchdb_proxy
-      @delete couchdb_urls, @auth, couchdb_proxy
-
 New tools.
 
       couchdb_urls = ///
