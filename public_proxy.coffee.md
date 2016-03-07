@@ -8,6 +8,7 @@
           username: @session.couchdb_username
           full_name: @session.full_name
           roles: @session.couchdb_roles
+          admin: @session.admin
 
       make_couchdb_proxy = require './make_couchdb_proxy'
 
