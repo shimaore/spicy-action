@@ -2,6 +2,8 @@
 
       request = (require 'superagent-as-promised') require 'superagent'
 
+Service presence.
+
       @get '/_spicy_action', @auth, ->
         @json
           ok:true
@@ -11,6 +13,8 @@
           admin: @session.admin
 
       make_couchdb_proxy = require './make_couchdb_proxy'
+
+User databases.
 
       couchdb_urls = ///
         ^ / u
@@ -28,6 +32,8 @@
       @put  couchdb_urls, @auth, couchdb_proxy
       @delete couchdb_urls, @auth, couchdb_proxy
 
+Provisioning and ruleset(s) databases.
+
       couchdb_urls = ///
         ^ /(provisioning|ruleset_[a-z\d_-]+)/
         ///
@@ -39,7 +45,7 @@
       @put  couchdb_urls, @auth, couchdb_proxy
       @delete couchdb_urls, @auth, couchdb_proxy
 
-New tools.
+Tools.
 
       couchdb_urls = ///
         ^ /tools/
@@ -47,11 +53,15 @@ New tools.
       couchdb_proxy = make_couchdb_proxy @cfg.tools_base ? @cfg.proxy_base
       @get  couchdb_urls, @auth, couchdb_proxy
 
+Logging, used for traces.
+
       couchdb_urls = ///
         ^ /logging/
         ///
       couchdb_proxy = make_couchdb_proxy @cfg.logging_base ? @cfg.proxy_base
       @get  couchdb_urls, @auth, couchdb_proxy
+
+Carrier-side CDRs.
 
       couchdb_urls = ///
         ^ /cdrs/
