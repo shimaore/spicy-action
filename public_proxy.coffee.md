@@ -47,19 +47,13 @@ Provisioning and ruleset(s) databases.
 
 Tools.
 
-      couchdb_urls = ///
-        ^ /tools/
-        ///
       couchdb_proxy = make_couchdb_proxy @cfg.tools_base ? @cfg.proxy_base
-      @get  couchdb_urls, @auth, couchdb_proxy
+      @get /// ^ /tools/ ///, @auth, couchdb_proxy
 
 Logging, used for traces.
 
-      couchdb_urls = ///
-        ^ /logging/
-        ///
       couchdb_proxy = make_couchdb_proxy @cfg.logging_base ? @cfg.proxy_base
-      @get  couchdb_urls, @auth, couchdb_proxy
+      @get /// ^ /logging/ ///, @auth, couchdb_proxy
 
 Carrier-side CDRs.
 
@@ -70,4 +64,4 @@ Carrier-side CDRs.
       @get  '/cdrs', @auth, couchdb_proxy
       @post '/cdrs/_all_docs', @auth, couchdb_proxy
       @post /// ^ /cdrs/_design/\w+/_view ///, @auth, couchdb_proxy
-      @get  couchdb_urls, @auth, couchdb_proxy
+      @get  /// ^ /cdrs/ ///, @auth, couchdb_proxy
