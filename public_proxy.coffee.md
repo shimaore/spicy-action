@@ -65,3 +65,11 @@ Carrier-side CDRs.
       @post '/cdrs/_all_docs', @auth, couchdb_proxy
       @post /// ^ /cdrs/_design/\w+/_view ///, @auth, couchdb_proxy
       @get  /// ^ /cdrs/ ///, @auth, couchdb_proxy
+
+Client-side CDRs.
+
+      couchdb_proxy = make_couchdb_proxy @cfg.cdrs_base ? @cfg.proxy_base
+      @get  '/cdrs-client', @auth, couchdb_proxy
+      @post '/cdrs-client/_all_docs', @auth, couchdb_proxy
+      @post /// ^ /cdrs-client/_design/\w+/_view ///, @auth, couchdb_proxy
+      @get  /// ^ /cdrs-client/ ///, @auth, couchdb_proxy
