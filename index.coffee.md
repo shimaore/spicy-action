@@ -8,6 +8,7 @@ This is also a Socket.IO server for external users, allowing the propagation of 
     run = (cfg) ->
       pkg = require './package.json'
       Cuddly = require 'cuddly'
+      fs = require 'fs'
 
       zappa = require 'zappajs'
 
