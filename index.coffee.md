@@ -33,6 +33,8 @@ External (public) service
       cfg.ssl.key  ?= fs.readFileSync cfg.ssl.key_file, 'utf-8'  if cfg.ssl.key_file?
       cfg.ssl.cert ?= fs.readFileSync cfg.ssl.cert_file, 'utf-8' if cfg.ssl.cert_file?
 
+      notification_rooms = /^\w+:/
+
       zappa cfg.public_host, cfg.public_port, https:cfg.ssl, ->
 
         @use morgan:'combined'
@@ -95,6 +97,24 @@ Local pub/sub logic.
             @join 'calls'
             @join 'support'
           @emit ready: roles:@session.couchdb_roles
+
+Request to join a given notification room.
+
+        @on follow: ->
+
+          room = @data
+
+          return unless typeof room is 'string'
+
+The notification room names have the format `<type>:<key>`.
+For example 'domain:example.com', or 'number:15005551234'.
+
+          return unless room.match notification_rooms
+
+Authorization for now is based on the roles. The room name must match a role for the user.
+
+          if room in @session.couchdb_roles
+            @join room
 
 Message towards `nifty-ground`
 
@@ -298,6 +318,14 @@ Register events
           do (event,r) =>
             @on event, ->
               r.emit event, @data
+
+Individual messages dispatch.
+
+              if @data._in?
+                @data._in = [@data._in] if typeof @data._in is 'string'
+                for room in @data._in when room.match notification_rooms
+                  do (room) =>
+                    @io.sockets.in(room).emit event, @data
 
 CouchDB reverse proxy with embedded authentication.
 
