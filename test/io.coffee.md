@@ -47,3 +47,5 @@ but doesn't currently work (`Ready check failed: Redis connection gone from end 
 
       it.skip "should propagate `internal` messages on the public port if admin", ->
         io2 = (require 'socket.io-client') 'http://127.0.0.1:52080'
+
+      it.skip 'should propagate directed messages on the public port', ->
