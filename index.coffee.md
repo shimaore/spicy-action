@@ -42,6 +42,13 @@ External (public) service
         @helper {cfg,pkg}
         @cfg = cfg
 
+        @helper user_data: ->
+          ok: true
+          username: @session?.couchdb_username
+          full_name: @session?.full_name
+          roles: @session?.couchdb_roles
+          admin: @session?.admin
+
         @get '/', ->
           @json
             ok:true
@@ -96,7 +103,7 @@ Local pub/sub logic.
             @join 'internal'
             @join 'calls'
             @join 'support'
-          @emit ready: roles:@session.couchdb_roles
+          @emit ready: @user_data()
 
 Request to join a given notification room.
 

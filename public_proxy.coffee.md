@@ -5,12 +5,7 @@
 Service presence.
 
       @get '/_spicy_action', @auth, ->
-        @json
-          ok:true
-          username: @session.couchdb_username
-          full_name: @session.full_name
-          roles: @session.couchdb_roles
-          admin: @session.admin
+        @json @user_data()
 
       make_couchdb_proxy = require './make_couchdb_proxy'
 
