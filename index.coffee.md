@@ -48,6 +48,8 @@ External (public) service
           full_name: @session?.full_name
           roles: @session?.couchdb_roles
           admin: @session?.admin
+          locale: @session?.locale
+          timezone: @session?.timezone
 
         @get '/', ->
           @json
