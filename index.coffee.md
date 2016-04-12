@@ -160,13 +160,13 @@ Inventory
             @broadcast_to 'traces', 'ping', @data
             @broadcast_to 'locations', 'ping', @data
 
+Local services. Order is important here, since these services may fallback to using the `public_proxy` versions with `@next 'route'`.
+
+        @include './local/public'
+
 CouchDB reverse proxy with embedded authentication.
 
         @include './public_proxy'
-
-Other local services.
-
-        @include './local/public'
 
 Internal (services): these need to be able to pub/sub and proxy.
 ====================
@@ -360,13 +360,13 @@ Individual messages dispatch.
                   do (room) =>
                     @io.sockets.in(room).emit event, @data
 
+Local services. Order is important here, since these services may fallback to using the `public_proxy` versions with `@next 'route'`.
+
+        @include './local/public'
+
 CouchDB reverse proxy with embedded authentication.
 
         @include './public_proxy'
-
-Other local services.
-
-        @include './local/public'
 
     module.exports = run
     if require.main is module
