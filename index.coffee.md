@@ -5,6 +5,7 @@ This is an authentication proxy for CouchDB, using a custom (cookie-session-base
 
 This is also a Socket.IO server for external users, allowing the propagation of events to users, and for internal (services) users, allowing the generation of events. In other words this is an event broker.
 
+    auth_required = require './auth_required'
     run = (cfg) ->
       pkg = require './package.json'
       Cuddly = require 'cuddly'
@@ -14,17 +15,6 @@ This is also a Socket.IO server for external users, allowing the propagation of 
 
       redis = require 'socket.io-redis'
 
-      auth_required = ->
-        if @session.couchdb_token?
-          @next()
-          return
-        @session = null
-        @res
-          .status 401
-          .set 'WWW-Authenticate': "Basic: realm=#{@pkg.name}"
-        @json error: 'Not authenticated'
-        @res.end()
-        return
 
 External (public) service
 =========================
