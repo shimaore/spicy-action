@@ -6,6 +6,8 @@ This is an authentication proxy for CouchDB, using a custom (cookie-session-base
 This is also a Socket.IO server for external users, allowing the propagation of events to users, and for internal (services) users, allowing the generation of events. In other words this is an event broker.
 
     auth_required = require './auth_required'
+    create_token = require './create-token'
+
     run = (cfg) ->
       pkg = require './package.json'
       Cuddly = require 'cuddly'
@@ -50,18 +52,37 @@ External (public) service
 
         @use 'cookie-parser'
 
-Authentication
+Authentication, Authorization, Token
+------------------------------------
+
+Authorization is provided against different backends.
 
         @auth = []
 
-        for auth_name in ['./local/auth','./couchdb-auth']
+        modules = [
+
+Authenticate, authorize, and create token using local (private) methods.
+
+          './local/auth'
+
+Authenticate and authorize (against CouchDB backend) ...
+
+          './couchdb-auth'
+
+... and create token (required to prevent double-auth).
+
+          './create-token'
+
+Validate that a proper session was created.
+
+          './auth-required'
+        ]
+
+        for auth_name in modules
           auth_module = require auth_name
           @include auth_module  if auth_module.include?
           @auth.push @wrap auth_module.middleware if auth_module.middleware?
 
-Fail if not authenticated.
-
-        @auth.push @wrap auth_required
 
 Express: Store our session in Redis so that we can offload the Socket.IO piece to a different server if needed.
 
@@ -158,18 +179,28 @@ Internal (services): these need to be able to pub/sub and proxy.
 
         @use 'cookie-parser'
 
-Authentication
+Authentication, Authorization, Token
+------------------------------------
 
         @auth = []
 
-        for auth_name in ['./couchdb-auth']
+        modules = [
+
+Authenticate, authorize, and create token.
+
+          './couchdb-auth'
+          './create-token'
+
+Fail if not authenticated.
+
+          './auth-required'
+        ]
+
+        for auth_name in modules
           auth_module = require auth_name
           @include auth_module  if auth_module.include?
           @auth.push @wrap auth_module.middleware if auth_module.middleware?
 
-Fail if not authenticated.
-
-        @auth.push @wrap auth_required
 
 Express: Store our session in Redis so that we can offload the Socket.IO piece to a different server if needed.
 

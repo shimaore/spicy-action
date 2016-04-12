@@ -1,5 +1,5 @@
-Authenticate against CouchDB
-----------------------------
+Authenticate and authorize using a CouchDB backend
+--------------------------------------------------
 
     request = (require 'superagent-as-promised') require 'superagent'
 
@@ -30,7 +30,6 @@ Try our method.
       .then ({body}) =>
         @session.couchdb_username = body.userCtx.name
         @session.couchdb_roles = body.userCtx.roles
-        @session.couchdb_token = hex_hmac_sha1 @cfg.couchdb_secret, @session.couchdb_username
 
 Do not mask errors in the remaining middlewares.
 
@@ -38,9 +37,3 @@ Do not mask errors in the remaining middlewares.
         @next()
       .catch (error) ->
         throw error
-
-    crypto = require 'crypto'
-    hex_hmac_sha1 = (key,value) ->
-      hmac = crypto.createHmac 'sha1', key
-      hmac.update value
-      hmac.digest 'hex'
