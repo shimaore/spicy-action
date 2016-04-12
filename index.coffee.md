@@ -82,6 +82,8 @@ Validate that a proper session was created.
           @include auth_module  if auth_module.include?
           @auth.push @wrap auth_module.middleware if auth_module.middleware?
 
+Session
+-------
 
 Express: Store our session in Redis so that we can offload the Socket.IO piece to a different server if needed.
 
@@ -200,6 +202,8 @@ Fail if not authenticated.
           @include auth_module  if auth_module.include?
           @auth.push @wrap auth_module.middleware if auth_module.middleware?
 
+Session
+-------
 
 Express: Store our session in Redis so that we can offload the Socket.IO piece to a different server if needed.
 
