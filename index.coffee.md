@@ -5,18 +5,17 @@ This is an authentication proxy for CouchDB, using a custom (cookie-session-base
 
 This is also a Socket.IO server for external users, allowing the propagation of events to users, and for internal (services) users, allowing the generation of events. In other words this is an event broker.
 
+    pkg = require './package.json'
+    Cuddly = require 'cuddly'
+    fs = require 'fs'
+
+    zappa = require 'zappajs'
+    redis = require 'socket.io-redis'
+
     auth_required = require './auth_required'
     create_token = require './create-token'
 
     run = (cfg) ->
-      pkg = require './package.json'
-      Cuddly = require 'cuddly'
-      fs = require 'fs'
-
-      zappa = require 'zappajs'
-
-      redis = require 'socket.io-redis'
-
 
 External (public) service
 =========================
