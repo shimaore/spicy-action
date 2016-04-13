@@ -12,9 +12,6 @@ This is also a Socket.IO server for external users, allowing the propagation of 
     zappa = require 'zappajs'
     redis = require 'socket.io-redis'
 
-    auth_required = require './auth_required'
-    create_token = require './create-token'
-
     run = (cfg) ->
 
 External (public) service
