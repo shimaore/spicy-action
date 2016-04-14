@@ -23,7 +23,11 @@ Skip if the user is not trying to authenticate using Basic.
 
 Try our method.
 
+* cfg.admin_role (string) Role used to indicate a CouchDB account should be considered admin (see session.admin ). Default: `_admin`
+
       admin_role = @cfg.admin_role ? '_admin'
+
+* cfg.auth_base (URL without authentication) CouchDB base used to authenticate users (when basic auth is used).
 
       request
       .get "#{ @cfg.auth_base }/_session"

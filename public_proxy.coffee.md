@@ -9,6 +9,8 @@ Service presence.
 
       make_couchdb_proxy = require './make_couchdb_proxy'
 
+* cfg.proxy_base (URL or array of URLs, without authentication) Servers and ports used to build proxies for various services.
+
 User databases.
 
       couchdb_urls = ///
@@ -29,6 +31,8 @@ User databases.
 
 Provisioning and ruleset(s) databases.
 
+* cfg.provisioning_base (URL or array of URLs, without_authentication) Servers and ports used to build proxies for provisioning and rulesets. Default: cfg.proxy_base
+
       couchdb_urls = ///
         ^ /(provisioning|ruleset_[a-z\d_-]+)/
         ///
@@ -42,15 +46,21 @@ Provisioning and ruleset(s) databases.
 
 Tools.
 
+* cfg.tools_base (URL or array of URLs, without_authentication) Servers and ports used to build proxies for tools. Default: cfg.proxy_base
+
       couchdb_proxy = make_couchdb_proxy @cfg.tools_base ? @cfg.proxy_base
       @get /// ^ /tools/ ///, @auth, couchdb_proxy
 
 Logging, used for traces.
 
+* cfg.logging_base (URL or array of URLs, without_authentication) Servers and ports used to build proxies for logging. Default: cfg.proxy_base
+
       couchdb_proxy = make_couchdb_proxy @cfg.logging_base ? @cfg.proxy_base
       @get /// ^ /logging/ ///, @auth, couchdb_proxy
 
 Carrier-side CDRs.
+
+* cfg.cdrs_base (URL or array of URLs, without_authentication) Servers and ports used to build proxies for cdrs and cdrs-client. Default: cfg.proxy_base
 
       couchdb_urls = ///
         ^ /cdrs/
