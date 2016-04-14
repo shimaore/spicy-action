@@ -26,7 +26,7 @@ Try our method.
       admin_role = @cfg.admin_role ? '_admin'
 
       request
-      .get "#{@cfg.auth_base ? @cfg.proxy_base}/_session"
+      .get "#{ @cfg.auth_base }/_session"
       .accept 'json'
       .auth user.name, user.pass
       .then ({body}) =>
