@@ -31,7 +31,7 @@ External (public) service
         @cfg = cfg
 
         @helper user_data: ->
-          ok: true
+          ok: @session?.couchdb_token?
           username: @session?.couchdb_username
           full_name: @session?.full_name
           roles: @session?.couchdb_roles
