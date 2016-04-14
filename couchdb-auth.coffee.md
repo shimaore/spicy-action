@@ -23,6 +23,8 @@ Skip if the user is not trying to authenticate using Basic.
 
 Try our method.
 
+      admin_role = @cfg.admin_role ? '_admin'
+
       request
       .get "#{@cfg.auth_base ? @cfg.proxy_base}/_session"
       .accept 'json'
@@ -30,6 +32,7 @@ Try our method.
       .then ({body}) =>
         @session.couchdb_username = body.userCtx.name
         @session.couchdb_roles = body.userCtx.roles
+        @session.admin = admin_role in @session.couchdb_roles
 
 Do not mask errors in the remaining middlewares.
 
