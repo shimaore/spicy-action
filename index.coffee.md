@@ -110,6 +110,9 @@ Socket.IO: allow broadcast across multiple Socket.IO servers (through Redis pub/
 
         @io.adapter redis cfg.redis
 
+Connection
+----------
+
 Local pub/sub logic.
 
         @on connection: ->
@@ -165,6 +168,9 @@ Leave request (from client)
           return unless typeof room is 'string'
           @leave room
 
+Messages towards the back-end CCNQ servers
+------------------------------------------
+
 Message towards `nifty-ground`
 
         @on trace: ->
@@ -188,11 +194,15 @@ Inventory
             @broadcast_to 'traces', 'ping', @data
             @broadcast_to 'locations', 'ping', @data
 
-Local services. Order is important here, since these services may fallback to using the `public_proxy` versions with `@next 'route'`.
+Local services
+--------------
+
+Order is important here, since these services may fallback to using the `public_proxy` versions with `@next 'route'`.
 
         @include './local/public'
 
-CouchDB reverse proxy with embedded authentication.
+CouchDB reverse proxy with embedded authentication
+--------------------------------------------------
 
         @include './public_proxy'
 
