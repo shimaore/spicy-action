@@ -377,9 +377,14 @@ Messages towards `ccnq4-opensips`
 Messages from ccnq4-opensips (to admins)
 ----------------------------------------
 
+See ccnq4-opensips/src/client/main.coffee
+
         handler['location:update'] = to.internal
         handler['location:response'] = to.internal
         handler['locations:response'] = to.internal
+
+See ccnq4-opensips/src/registrant/main.coffee
+
         handler['registrants:response'] = to.internal
 
 Invalid source IP for registration (if endpoint has `user_ip`)
@@ -410,6 +415,8 @@ Individual messages dispatch.
                   do (room) =>
                     @io.sockets.in(room).emit event, @data
 
+Export
+======
 
     module.exports = run
     if require.main is module
