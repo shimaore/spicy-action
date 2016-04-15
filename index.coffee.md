@@ -356,6 +356,15 @@ Set the `notify` configuration parameter of ccnq4-opensips to `https://server.ex
             return
 
           handler[msg].emit msg, @body
+
+Forward messages for specific endpoints to customers.
+(This prevents having to figure out how to code the `_in` array in OpenSIPS notifications.)
+See ccnq4-opensips/src/config/fragments/generic.cfg and src/config/fragments/register-colocated.cfg
+
+          if @body.endpoint?
+            room = "endpoint:#{endpoint}"
+            @io.sockets.in(room).emit msg, @body
+
           @json ok:true
 
 Messages towards `ccnq4-opensips`
