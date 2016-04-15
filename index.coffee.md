@@ -12,6 +12,17 @@ This is also a Socket.IO server for external users, allowing the propagation of 
     zappa = require 'zappajs'
     redis = require 'socket.io-redis'
 
+    private_buses = [
+      'calls'
+      'internal'
+      'locations'
+      'support'
+      'traces'
+    ]
+    public_buses = [
+      'everyone'
+    ]
+
     run = (cfg) ->
 
 External (public) service
@@ -235,13 +246,7 @@ Socket.IO: allow broadcast across multiple Socket.IO servers (through Redis pub/
 
         @on configure: ->
 
-          for bus in [
-            'calls'
-            'internal'
-            'locations'
-            'support'
-            'traces'
-          ]
+          for bus in private_buses
             do (bus) =>
               switch @data[bus]
                 when true
@@ -259,14 +264,8 @@ The `locations` bus is subscribed by the `ccnq4-opensips` servers.
 These are normally directed at admins, but might be used by notifications tools (e.g. notification-to-email tools).
 
         to = {}
-        to[r] = @io.sockets.in r for r in [
-          'calls'
-          'everyone'
-          'internal'
-          'locations'
-          'support'
-          'traces'
-        ]
+        to[r] = @io.sockets.in r for r in private_buses
+        to[r] = @io.sockets.in r for r in public_buses
 
         @on shout: ->
           to.internal.emit 'shouted', {@id,@data}
