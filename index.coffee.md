@@ -105,34 +105,41 @@ Local pub/sub logic.
           @join 'public' # No authentication required
           @emit welcome: {@id,name:pkg.name,version:pkg.version,public:true}
 
-        @on join: ->
-          unless @session?.couchdb_username?
-            @emit failed: {msg:'You must authenticate first.'}
-            return
-          @join 'everyone'
-          if @session.admin
-            @join 'internal'
-            @join 'calls'
-            @join 'support'
-          @emit ready: @user_data()
+Join request (from client)
+--------------------------
 
 Request to join a given notification room.
 
-        @on follow: ->
+        @on join: ->
+
+          unless @session?.couchdb_token?
+            @emit failed: {msg:'You must authenticate first.'}
+            return
 
           room = @data
 
-          return unless typeof room is 'string'
+          unless room? and typeof room is 'string'
+            @join 'everyone'
+            @emit ready: @user_data()
+            return
+
+          ok = false
+
+          ok = true if room in public_buses
+          ok = true if room in private_buses and @session.admin
 
 The notification room names have the format `<type>:<key>`.
 For example 'domain:example.com', or 'number:15005551234'.
-
-          return unless room.match notification_rooms
-
 Authorization for now is based on the roles. The room name must match a role for the user.
 
-          if room in @session.couchdb_roles
-            @join room
+          if room.match notification_rooms
+            ok = true if @session.admin or room in @session.couchdb_roles
+
+          return unless ok
+
+          @join room
+          @emit joined: room
+
 
 Message towards `nifty-ground`
 
