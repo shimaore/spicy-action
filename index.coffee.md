@@ -151,6 +151,19 @@ Authorization for now is based on the roles. The room name must match a role for
           @join room
           @emit joined: room
 
+Leave request (from client)
+---------------------------
+
+        @on leave: ->
+
+          unless @session?.couchdb_token?
+            @emit failed: {msg:'You must authenticate first.'}
+            return
+
+          room = @data
+
+          return unless typeof room is 'string'
+          @leave room
 
 Message towards `nifty-ground`
 
