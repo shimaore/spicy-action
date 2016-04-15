@@ -149,10 +149,13 @@ Authorization for now is based on the roles. The room name must match a role for
           if room.match notification_rooms
             ok = true if @session.admin or room in @session.couchdb_roles
 
-          return unless ok
+For status, client might use the ack response, or wait for the `joined` event.
 
-          @join room
-          @emit joined: room
+          if ok
+            @join room
+            @emit joined: room
+
+          @ack? ok
 
 Leave request (from client)
 ---------------------------
