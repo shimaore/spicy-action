@@ -382,6 +382,18 @@ Messages from ccnq4-opensips (to admins)
         handler['locations:response'] = to.internal
         handler['registrants:response'] = to.internal
 
+Invalid source IP for registration (if endpoint has `user_ip`)
+
+        handler.script_register = to.suport
+
+Register notification (off by default)
+
+        handler.location = to.support
+
+Indication of rate limiting (if `rate_limit_requests` is enabled for OpenSIPS)
+
+        handler.pipe_blocked = to.support
+
 Register events
 ---------------
 
