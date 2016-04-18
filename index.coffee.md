@@ -296,10 +296,10 @@ These are normally directed at admins, but might be used by notifications tools 
 
         to = {}
         for r in private_buses
-          do (r) ->
+          do (r) =>
             to[r] = @io.sockets.in r
         for r in public_buses
-          do (r) ->
+          do (r) =>
             to[r] = @io.sockets.in r
 
         @on shout: ->
