@@ -117,6 +117,7 @@ Local pub/sub logic.
 
         @on connection: ->
           @join 'public' # No authentication required
+          @emit joined: 'public'
           @emit welcome: {@id,name:pkg.name,version:pkg.version,public:true}
 
 Join request (from client)
@@ -134,6 +135,7 @@ Request to join a given notification room.
 
           unless room? and typeof room is 'string'
             @join 'everyone'
+            @emit joined: 'everyone'
             @emit ready: @user_data()
             return
 
