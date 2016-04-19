@@ -297,10 +297,10 @@ These are normally directed at admins, but might be used by notifications tools 
         to = {}
         for r in private_buses
           do (r) =>
-            to[r] = @io.sockets.in r
+            to[r] = @io.to r
         for r in public_buses
           do (r) =>
-            to[r] = @io.sockets.in r
+            to[r] = @io.to r
 
         @on shout: ->
           to.internal.emit 'shouted', {@id,@data}
@@ -423,7 +423,7 @@ Individual messages dispatch.
                 @data._in = [@data._in] if typeof @data._in is 'string'
                 for room in @data._in when room.match notification_rooms
                   do (room) =>
-                    @io.sockets.in(room).emit event, @data
+                    @io.to(room).emit event, @data
 
 Export
 ======
