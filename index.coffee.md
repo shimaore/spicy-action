@@ -10,7 +10,8 @@ This is also a Socket.IO server for external users, allowing the propagation of 
     fs = require 'fs'
 
     zappa = require 'zappajs'
-    redis = require 'socket.io-redis'
+    redis = (require 'redis').createClient
+    adapter = require 'socket.io-redis'
 
     private_buses = [
       'calls'
@@ -33,6 +34,10 @@ External (public) service
       cfg.ssl.cert ?= fs.readFileSync cfg.ssl.cert_file, 'utf-8' if cfg.ssl.cert_file?
 
       notification_rooms = /^\w+:/
+
+      pubClient = redis cfg.redis
+      cfg.redis.return_buffers = true
+      subClient = redis cfg.redis
 
       zappa cfg.public_host, cfg.public_port, https:cfg.ssl, ->
 
@@ -108,7 +113,7 @@ Express: Store our session in Redis so that we can offload the Socket.IO piece t
 
 Socket.IO: allow broadcast across multiple Socket.IO servers (through Redis pub/sub).
 
-        @io.adapter redis cfg.redis
+        @io.adapter adapter {pubClient,subClient}
 
 Connection
 ----------
@@ -263,7 +268,7 @@ Express: Store our session in Redis so that we can offload the Socket.IO piece t
 
 Socket.IO: allow broadcast across multiple Socket.IO servers (through Redis pub/sub).
 
-        @io.adapter redis cfg.redis
+        @io.adapter adapter {pubClient,subClient}
 
         @get '/', ->
           @json
