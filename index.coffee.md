@@ -295,12 +295,17 @@ The `locations` bus is subscribed by the `ccnq4-opensips` servers.
 These are normally directed at admins, but might be used by notifications tools (e.g. notification-to-email tools).
 
         to = {}
+        make_to = (room) =>
+          room = @io.to room
+          emit: ->
+            room.emit.apply room, arguments
+
         for r in private_buses
           do (r) =>
-            to[r] = @io.to r
+            to[r] = make_to r
         for r in public_buses
           do (r) =>
-            to[r] = @io.to r
+            to[r] = make_to r
 
         @on shout: ->
           to.internal.emit 'shouted', {@id,@data}
@@ -373,7 +378,7 @@ See ccnq4-opensips/src/config/fragments/generic.cfg and src/config/fragments/reg
 
           if @body.endpoint?
             room = "endpoint:#{endpoint}"
-            @io.sockets.in(room).emit msg, @body
+            @io.to(room).emit msg, @body
 
           @json ok:true
 
