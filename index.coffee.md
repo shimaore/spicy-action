@@ -296,9 +296,8 @@ These are normally directed at admins, but might be used by notifications tools 
 
         to = {}
         make_to = (room) =>
-          room = @io.to room
-          emit: ->
-            room.emit.apply room, arguments
+          emit: =>
+            @io.to(room).emit arguments...
 
         for r in private_buses
           do (r) =>
