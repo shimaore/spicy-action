@@ -366,6 +366,7 @@ Set the `notify` configuration parameter of ccnq4-opensips to `https://server.ex
         @post '/_notify/:msg', jsonBody, ->
           msg = @params.msg
           unless handler[msg]?
+            debug "No handler for #{msg}", @body
             @json ok:false, ignore:true
             return
 
