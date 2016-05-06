@@ -1,9 +1,5 @@
-#
-# This is a generic Makefile. It uses contents from package.json
-# to build Docker images.
-#
-NAME=`jq -r .docker_name package.json`
-TAG=`jq -r .version package.json`
+NAME := $(shell jq -r .docker_name package.json)
+TAG := $(shell jq -r .version package.json)
 
 image:
 	docker build -t ${NAME}:${TAG} .
