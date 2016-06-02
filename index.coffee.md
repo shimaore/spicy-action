@@ -388,6 +388,8 @@ Messages towards `ccnq4-opensips`
         handler.location = to.locations
         handler.locations = to.locations
         handler.registrants = to.locations
+        handler.presentities = to.locations
+        handler.active_watchers = to.locations
 
 Messages from ccnq4-opensips (to admins)
 ----------------------------------------
@@ -397,6 +399,8 @@ See ccnq4-opensips/src/client/main.coffee
         handler['location:update'] = to.internal
         handler['location:response'] = to.internal
         handler['locations:response'] = to.internal
+        handler['presentities:response'] = to.internal
+        handler['active_watchers:response'] = to.internal
 
 See ccnq4-opensips/src/registrant/main.coffee
 
