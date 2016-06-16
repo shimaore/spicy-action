@@ -376,8 +376,8 @@ Forward messages for specific endpoints to customers.
 (This prevents having to figure out how to code the `_in` array in OpenSIPS notifications.)
 See ccnq4-opensips/src/config/fragments/generic.cfg and src/config/fragments/register-colocated.cfg
 
-          if @body.endpoint?
-            room = "endpoint:#{endpoint}"
+          if @body?.endpoint?
+            room = "endpoint:#{@body.endpoint}"
             @io.to(room).emit msg, @body
 
           @json ok:true
@@ -428,7 +428,7 @@ Register events
 
 Individual messages dispatch.
 
-              if @data._in?
+              if @data?._in?
                 @data._in = [@data._in] if typeof @data._in is 'string'
                 for room in @data._in when room.match notification_rooms
                   do (room) =>
