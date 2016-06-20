@@ -6,6 +6,8 @@ This is an authentication proxy for CouchDB, using a custom (cookie-session-base
 This is also a Socket.IO server for external users, allowing the propagation of events to users, and for internal (services) users, allowing the generation of events. In other words this is an event broker.
 
     pkg = require './package.json'
+    @name = "spicy-action:index"
+    debug = (require 'debug') @name
     Cuddly = require 'cuddly'
     fs = require 'fs'
 
