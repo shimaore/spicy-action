@@ -59,8 +59,6 @@ External (public) service
             version:pkg.version
             local:(require './local/package.json').version
 
-        @use 'cookie-parser'
-
 Authentication, Authorization, Token
 ------------------------------------
 
@@ -225,8 +223,6 @@ These need to be able to pub/sub.
 
         @helper {cfg,pkg}
         @cfg = cfg
-
-        @use 'cookie-parser'
 
 Authentication, Authorization, Token
 ------------------------------------
