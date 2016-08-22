@@ -40,6 +40,8 @@ Provisioning and ruleset(s) databases.
       @get  '/provisioning', @auth, couchdb_proxy
       @get  '/ruleset_[a-z\d_-]+', @auth, couchdb_proxy
       @get  '/rates-[a-z\d_-]+', @auth, couchdb_proxy
+      @put  '/ruleset_[a-z\d_-]+', @auth, couchdb_proxy  # allow creation
+      @put  '/rates-[a-z\d_-]+', @auth, couchdb_proxy    # allow creation
       @get  couchdb_urls, @auth, couchdb_proxy
       @post couchdb_urls, @auth, couchdb_proxy
       @put  couchdb_urls, @auth, couchdb_proxy
