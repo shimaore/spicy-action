@@ -1,4 +1,4 @@
-FROM shimaore/debian:2.0.8
+FROM shimaore/debian:2.0.10
 MAINTAINER Stéphane Alnet <stephane@shimaore.net>
 
 #-------------------#
@@ -16,7 +16,7 @@ RUN git clone https://github.com/tj/n.git n.git \
  && make install \
  && cd .. \
  && rm -rf n.git \
- && n 4.4.5
+ && n 6.4.0
 ENV NODE_ENV production
 
 #-------------------#
