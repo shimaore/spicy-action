@@ -14,9 +14,9 @@
     "request": "^2.74.0",
     "socket.io-client": "^1.4.8",
     "socket.io-redis": "^1.0.0",
-    "superagent": "^2.1.0",
+    "superagent": "^2.2.0",
     "superagent-as-promised": "^4.0.0",
-    "zappajs": "^5.1.0"
+    "zappajs": "^6.0.2"
   },
   "devDependencies": {
     "bluebird": "^3.4.1",
