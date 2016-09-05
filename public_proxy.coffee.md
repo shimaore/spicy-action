@@ -36,12 +36,25 @@ Provisioning and ruleset(s) databases.
       couchdb_urls = ///
         ^ /(provisioning|ruleset_[a-z\d_-]+|rates-[a-z\d_-]+)/
         ///
+
+      escalate_rulesets_admin = @wrap ->
+        return unless @session.couchdb_roles?
+        return unless 'rulesets_admin' in @session.couchdb_roles
+        return if '_admin' in @session.couchdb_roles
+        @session.couchdb_roles.push '_admin'
+
+      escalate_rates_admin = @wrap ->
+        return unless @session.couchdb_roles?
+        return unless 'rates_admin' in @session.couchdb_roles
+        return if '_admin' in @session.couchdb_roles
+        @session.couchdb_roles.push '_admin'
+
       couchdb_proxy = make_couchdb_proxy @cfg.provisioning_base ? @cfg.proxy_base
       @get  '/provisioning', @auth, couchdb_proxy
       @get  '/ruleset_[a-z\d_-]+', @auth, couchdb_proxy
       @get  '/rates-[a-z\d_-]+', @auth, couchdb_proxy
-      @put  '/ruleset_[a-z\d_-]+', @auth, couchdb_proxy  # allow creation
-      @put  '/rates-[a-z\d_-]+', @auth, couchdb_proxy    # allow creation
+      @put  '/ruleset_[a-z\d_-]+', [@auth..., escalate_rulesets_admin], couchdb_proxy
+      @put  '/rates-[a-z\d_-]+', [@auth..., escalate_rates_admin], couchdb_proxy
       @get  couchdb_urls, @auth, couchdb_proxy
       @post couchdb_urls, @auth, couchdb_proxy
       @put  couchdb_urls, @auth, couchdb_proxy
