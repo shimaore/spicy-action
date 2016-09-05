@@ -55,6 +55,8 @@ Provisioning and ruleset(s) databases.
       @get  '/rates-[a-z\d_-]+', @auth, couchdb_proxy
       @put  '/ruleset_[a-z\d_-]+', [@auth..., escalate_rulesets_admin], couchdb_proxy
       @put  '/rates-[a-z\d_-]+', [@auth..., escalate_rates_admin], couchdb_proxy
+      @put  '/ruleset_[a-z\d_-]+/_security', [@auth..., escalate_rulesets_admin], couchdb_proxy
+      @put  '/rates-[a-z\d_-]+/_security', [@auth..., escalate_rates_admin], couchdb_proxy
       @get  couchdb_urls, @auth, couchdb_proxy
       @post couchdb_urls, @auth, couchdb_proxy
       @put  couchdb_urls, @auth, couchdb_proxy
