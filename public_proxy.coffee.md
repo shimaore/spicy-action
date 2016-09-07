@@ -53,6 +53,9 @@ Provisioning and ruleset(s) databases.
       @get  '/provisioning', @auth, couchdb_proxy
       @get  '/ruleset_[a-z\d_-]+', @auth, couchdb_proxy
       @get  '/rates-[a-z\d_-]+', @auth, couchdb_proxy
+
+FIXME à ré-écrire, en fait il faut faire la création de la base (et le PUT du security doc) sur les deux back-ends, etc.
+
       @put  '/ruleset_[a-z\d_-]+', [@auth..., escalate_rulesets_admin], couchdb_proxy
       @put  '/rates-[a-z\d_-]+', [@auth..., escalate_rates_admin], couchdb_proxy
       @put  '/ruleset_[a-z\d_-]+/_security', [@auth..., escalate_rulesets_admin], couchdb_proxy
