@@ -30,6 +30,12 @@
           @get '/hang', ->
             @json hung:true
 
+          @get '/start-and-hang', ->
+            @json starthung:true
+
+          @get '/start-and-hang-long', ->
+            @json starthung:true
+
           @get '/too-slow', ->
             @json hung:true
 
@@ -41,6 +47,22 @@
 Just hang.
 
           @get '/hang', ->
+
+Start and hang.
+
+          @get '/start-and-hang', ->
+            @res.write '{"results":[\n'
+            Promise.delay 3000
+            .then =>
+              @res.end ']}'
+
+Start and hang (long pause).
+
+          @get '/start-and-hang-long', ->
+            @res.write '{"results":[\n'
+            Promise.delay 35000
+            .then =>
+              @res.end ']}'
 
 Provide the answer before timeout.
 
@@ -158,6 +180,32 @@ Provide the answer before timeout.
           duration = end-start
           chai.expect(duration).to.be.at.least 1500
           chai.expect(duration).to.be.at.most 2500
+
+      it 'should not failover on hung partial response', ->
+        @timeout 6000
+        start = Date.now()
+        request
+        .get "http://127.0.0.1:#{silly_port}/start-and-hang"
+        .accept 'json'
+        .then ({text}) ->
+
+Previously we used to concatenate the results, leading to errors.
+
+          text.should.not.eql '{"results":[\n{"starthung":true}'
+          text.should.eql '{"results":[\n]}'
+
+      it 'should not failover on hung partial response (long test)', ->
+        @timeout 60000
+        start = Date.now()
+        request
+        .get "http://127.0.0.1:#{silly_port}/start-and-hang-long"
+        .accept 'json'
+        .then ({text}) ->
+
+Previously we used to concatenate the results, leading to errors.
+
+          text.should.not.eql '{"results":[\n{"starthung":true}'
+          text.should.eql '{"results":[\n]}'
 
       it 'should wait on slow body which is last', ->
         @timeout 10000

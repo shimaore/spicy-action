@@ -49,13 +49,25 @@ Skip `null` entries
             followRedirects: false # .redirects 0
             maxRedirects: 0
             strictSSL: false # .agent false
-            timeout: timeout
 
-Initial request attempt to the first backed: pipe the request to the server.
-In case of error (assuming network error, hence the request was not piped yet), attempt to pipe to the failover server (if any).
+Initial request attempt to the first backend: pipe the request to the server.
+
+Failover on timeout.
+
+          timer = setTimeout ->
+            failover index, new Error 'Timeout'
+          , timeout
+
+In some case (e.g.) CouchDB will emit a first line of `_changes` reponse with `{"results":[`, then take a long time, and failover happens at that point, leading to messed-up response if we simply failover.
 
           @request.pipe proxy
+          .on 'response', ->
+            clearTimeout timer
+
+In case of error (assuming network error, hence the request was not piped yet), attempt to pipe to the failover server (if any).
+
           .on 'error', (error) ->
+            clearTimeout timer
             failover index, error
 
 Pipe the response back to the client.
