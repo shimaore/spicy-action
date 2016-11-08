@@ -34,14 +34,24 @@ Provisioning and ruleset(s) databases.
 * cfg.provisioning_base (URL or array of URLs, without_authentication) Servers and ports used to build proxies for provisioning and rulesets. Default: cfg.proxy_base
 
       couchdb_urls = ///
-        ^ /(provisioning|ruleset_[a-z\d_-]+|rates-[a-z\d_-]+)/
+        ^ /(
+              provisioning
+            | plans
+            | ruleset_[a-z\d_-]+
+            | rates-[a-z\d_-]+
+            | cdr-[a-z\d_-]+
+            | trace-[a-z\d_-]+
+          )/
         ///
       couchdb_proxy = make_couchdb_proxy @cfg.provisioning_base ? @cfg.proxy_base
       @get  '/provisioning', @auth, couchdb_proxy
+      @get  '/plans', @auth, couchdb_proxy
       @get  '/ruleset_[a-z\d_-]+', @auth, couchdb_proxy
       @get  '/rates-[a-z\d_-]+', @auth, couchdb_proxy
+      @get  '/trace-[a-z\d_-]+', @auth, couchdb_proxy
       @put  '/ruleset_[a-z\d_-]+', @auth, couchdb_proxy  # allow creation
       @put  '/rates-[a-z\d_-]+', @auth, couchdb_proxy    # allow creation
+      @put  '/trace-[a-z\d_-]+', @auth, couchdb_proxy    # allow creation
       @get  couchdb_urls, @auth, couchdb_proxy
       @post couchdb_urls, @auth, couchdb_proxy
       @put  couchdb_urls, @auth, couchdb_proxy
