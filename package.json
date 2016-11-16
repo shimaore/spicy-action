@@ -9,14 +9,14 @@
     "body-parser": "^1.15.2",
     "connect-redis": "^3.1.0",
     "cuddly": "^1.1.5",
-    "debug": "^2.2.0",
+    "debug": "^2.3.2",
     "morgan": "^1.7.0",
     "request": "^2.78.0",
     "socket.io-client": "^1.5.1",
     "socket.io-redis": "^1.1.1",
     "superagent": "^2.3.0",
     "superagent-as-promised": "^4.0.0",
-    "zappajs": "^6.0.4"
+    "zappajs": "^6.2.0"
   },
   "devDependencies": {
     "bluebird": "^3.4.6",
