@@ -37,21 +37,21 @@ Provisioning and ruleset(s) databases.
         ^ /(
               provisioning
             | plans
-            | ruleset_[a-z\d_-]+
-            | rates-[a-z\d_-]+
-            | cdr-[a-z\d_-]+
-            | trace-[a-z\d_-]+
+            | ruleset_[\w-]+
+            | rates-[\w-]+
+            | cdr-[\w_-]+
+            | trace-[\w-]+
           )/
         ///
       couchdb_proxy = make_couchdb_proxy @cfg.provisioning_base ? @cfg.proxy_base
       @get  '/provisioning', @auth, couchdb_proxy
       @get  '/plans', @auth, couchdb_proxy
-      @get  '/ruleset_[a-z\d_-]+', @auth, couchdb_proxy
-      @get  '/rates-[a-z\d_-]+', @auth, couchdb_proxy
-      @get  '/trace-[a-z\d_-]+', @auth, couchdb_proxy
-      @put  '/ruleset_[a-z\d_-]+', @auth, couchdb_proxy  # allow creation
-      @put  '/rates-[a-z\d_-]+', @auth, couchdb_proxy    # allow creation
-      @put  '/trace-[a-z\d_-]+', @auth, couchdb_proxy    # allow creation
+      @get  '/ruleset_[\w-]+', @auth, couchdb_proxy
+      @get  '/rates-[\w-]+', @auth, couchdb_proxy
+      @get  '/trace-[\w-]+', @auth, couchdb_proxy
+      @put  '/ruleset_[\w-]+', @auth, couchdb_proxy  # allow creation
+      @put  '/rates-[\w-]+', @auth, couchdb_proxy    # allow creation
+      @put  '/trace-[\w-]+', @auth, couchdb_proxy    # allow creation
       @get  couchdb_urls, @auth, couchdb_proxy
       @post couchdb_urls, @auth, couchdb_proxy
       @put  couchdb_urls, @auth, couchdb_proxy
