@@ -9,20 +9,20 @@
     "body-parser": "^1.15.2",
     "connect-redis": "^3.1.0",
     "cuddly": "^1.1.5",
-    "debug": "^2.3.2",
+    "debug": "^2.3.3",
     "morgan": "^1.7.0",
     "request": "^2.79.0",
-    "socket.io-client": "^1.6.0",
-    "socket.io-redis": "^1.1.1",
-    "superagent": "^3.0.0",
+    "socket.io-client": "^1.7.2",
+    "socket.io-redis": "^2.0.1",
+    "superagent": "^3.2.1",
     "superagent-as-promised": "^4.0.0",
     "zappajs": "^6.2.0"
   },
   "devDependencies": {
     "bluebird": "^3.4.6",
     "chai": "^3.5.0",
-    "coffee-script": "^1.11.1",
-    "mocha": "^3.1.2"
+    "coffee-script": "^1.12.1",
+    "mocha": "^3.2.0"
   },
   "scripts": {
     "prepublish": "coffee -c -M *.coffee.md",
