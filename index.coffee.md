@@ -335,10 +335,15 @@ Support-class messages
           do (event) ->
             handler[event] = to.support
 
-Messages from `docker.tough-rate/notify` (to admins)
-----------------------------------------------------
+Messages from `huge-play`
+-------------------------
 
         handler.call = to.calls
+        handler.reference = to.calls
+
+Messages from `thinkable-ducks` (to admins)
+-------------------------------------------
+
         handler['statistics:add'] = to.calls
 
 Messages to `nifty-ground` clients
