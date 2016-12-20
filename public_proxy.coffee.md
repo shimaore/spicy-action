@@ -48,6 +48,7 @@ Provisioning and ruleset(s) databases.
       @get  '/plans', @auth, couchdb_proxy
       @get  '/ruleset_[\w-]+', @auth, couchdb_proxy
       @get  '/rates-[\w-]+', @auth, couchdb_proxy
+      @get  '/cdr-[\w-]+', @auth, couchdb_proxy
       @get  '/trace-[\w-]+', @auth, couchdb_proxy
       @put  '/ruleset_[\w-]+', @auth, couchdb_proxy  # allow creation
       @put  '/rates-[\w-]+', @auth, couchdb_proxy    # allow creation
@@ -71,7 +72,7 @@ Logging, used for traces.
       couchdb_proxy = make_couchdb_proxy @cfg.logging_base ? @cfg.proxy_base
       @get /// ^ /logging/ ///, @auth, couchdb_proxy
 
-Carrier-side CDRs.
+FreeSwitch-generated, carrier-side CDRs.
 
 * cfg.cdrs_base (URL or array of URLs, without_authentication) Servers and ports used to build proxies for cdrs and cdrs-client. Default: cfg.proxy_base
 
@@ -84,7 +85,7 @@ Carrier-side CDRs.
       @post /// ^ /cdrs/_design/\w+/_view ///, @auth, couchdb_proxy
       @get  /// ^ /cdrs/ ///, @auth, couchdb_proxy
 
-Client-side CDRs.
+FreeSwitch-generated, client-side CDRs.
 
       couchdb_proxy = make_couchdb_proxy @cfg.cdrs_base ? @cfg.proxy_base
       @get  '/cdrs-client', @auth, couchdb_proxy
