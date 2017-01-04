@@ -51,12 +51,6 @@ Provisioning and ruleset(s) databases.
       @get  '/cdr-[\w-]+', @auth, couchdb_proxy
       @get  '/trace-[\w-]+', @auth, couchdb_proxy
 
-      ###
-      @put  '/ruleset_[\w-]+', @auth, couchdb_proxy  # allow creation
-      @put  '/rates-[\w-]+', @auth, couchdb_proxy    # allow creation
-      @put  '/cdr-[\w-]+', @auth, couchdb_proxy    # allow creation
-      @put  '/trace-[\w-]+', @auth, couchdb_proxy    # allow creation
-      ###
       @get  couchdb_urls, @auth, couchdb_proxy
       @post couchdb_urls, @auth, couchdb_proxy
       @put  couchdb_urls, @auth, couchdb_proxy
