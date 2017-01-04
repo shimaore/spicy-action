@@ -16,7 +16,7 @@ RUN git clone https://github.com/tj/n.git n.git \
  && make install \
  && cd .. \
  && rm -rf n.git \
- && n 7.2.1
+ && n 7.4.0
 ENV NODE_ENV production
 
 #-------------------#
