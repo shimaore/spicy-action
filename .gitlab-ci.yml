@@ -11,7 +11,7 @@ test:
 push:
   stage: deploy
   only:
-  - opensips-2.2
+  - master
   script:
   - docker push ${CI_REGISTRY_IMAGE}:${PROJECT_TAG}
 
