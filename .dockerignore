@@ -1,6 +1,5 @@
 .git
 node_modules
 local
-test
 .dockerignore
 Makefile
