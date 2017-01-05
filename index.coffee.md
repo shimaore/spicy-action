@@ -97,7 +97,7 @@ Socket.IO: allow broadcast across multiple Socket.IO servers (through Redis pub/
 
         @io.adapter redis cfg.redis
 
-        @include './public-message-broker'
+        @include './external-message-broker'
 
 Local services
 --------------
@@ -170,7 +170,7 @@ Socket.IO: allow broadcast across multiple Socket.IO servers (through Redis pub/
             version:pkg.version
             local:(require './local/package.json').version
 
-        @include './private-message-broker'
+        @include './internal-message-broker'
 
 Export
 ======
