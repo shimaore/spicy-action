@@ -8,7 +8,6 @@ This is also a Socket.IO server for external users, allowing the propagation of 
     pkg = require './package.json'
     @name = "spicy-action:index"
     debug = (require 'debug') @name
-    Cuddly = require 'cuddly'
     fs = require 'fs'
 
     zappa = require 'zappajs'

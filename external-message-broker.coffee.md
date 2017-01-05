@@ -117,4 +117,6 @@ Unsubscribe
       return unless typeof room is 'string'
       @leave room
 
+    @name = "spicy-action:external-message-broker"
+    debug = (require 'debug') @name
     {public_buses,notification_rooms,host_buses,private_buses} = require './buses'

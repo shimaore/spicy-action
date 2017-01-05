@@ -1,6 +1,8 @@
 Socket.io message-broker for the private (internal) API
 =======================================================
 
+    Cuddly = require 'cuddly'
+
     @include = ->
 
 Connection
@@ -228,4 +230,6 @@ Toolbox
       return unless typeof room is 'string'
       @leave room
 
+    @name = "spicy-action:internal-message-broker"
+    debug = (require 'debug') @name
     {public_buses,notification_rooms,host_buses,private_buses} = require './buses'
