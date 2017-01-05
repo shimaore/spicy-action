@@ -13,9 +13,9 @@ This is also a Socket.IO server for external users, allowing the propagation of 
     zappa = require 'zappajs'
     redis = require 'socket.io-redis'
 
-    local_pkg = require './local/package.json'
-
     run = (cfg) ->
+
+      local_pkg = require './local/package.json'
 
 External (public) service
 =========================
