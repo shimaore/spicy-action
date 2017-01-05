@@ -232,4 +232,5 @@ Toolbox
 
     @name = "spicy-action:internal-message-broker"
     debug = (require 'debug') @name
+    pkg = require './package.json'
     {public_buses,notification_rooms,host_buses,private_buses} = require './buses'
