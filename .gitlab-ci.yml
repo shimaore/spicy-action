@@ -1,7 +1,6 @@
 build:
   stage: build
   script:
-  - sed -e "s/DOCKER_OPENSIPS_VERSION/${DOCKER_OPENSIPS_VERSION}/" Dockerfile.src > Dockerfile
   - docker build -t ${CI_REGISTRY_IMAGE}:${PROJECT_TAG} .
 
 test:
