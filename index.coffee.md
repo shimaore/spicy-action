@@ -32,13 +32,18 @@ External (public) service
         @cfg = cfg
 
         @helper user_data: ->
-          ok: @session?.couchdb_token?
-          username: @session?.couchdb_username
-          full_name: @session?.full_name
-          roles: @session?.couchdb_roles
-          admin: @session?.admin
-          locale: @session?.locale
-          timezone: @session?.timezone
+          res =
+            ok: @session?.couchdb_token?
+            username: @session?.couchdb_username
+            full_name: @session?.full_name
+            roles: @session?.couchdb_roles
+            admin: @session?.admin
+            locale: @session?.locale
+            timezone: @session?.timezone
+          if @session.user_params?
+            for own k,v of @session.user_params
+              res[k] ?= v
+          res
 
         @get '/', ->
           @json
