@@ -160,7 +160,7 @@ All events are also sent in the rooms/busses optionally specified using the `_in
 
       register = (event) =>
         @on event, ->
-          handler[event].emit event, @data
+          handler[event]?.emit event, @data
 
 Individual messages dispatch.
 
@@ -169,6 +169,8 @@ Individual messages dispatch.
             for room in @data._in when room.match notification_rooms
               do (room) =>
                 @io.to(room).emit event, @data
+
+        debug 'Registered event', event
 
       for event of handler
         do (event) => register event
@@ -183,9 +185,13 @@ This allows internal servers to dynamically register events (and should eventual
       @on 'register', ->
         {event,default_room} = @data
         already_registered = event of handler
+        debug 'Registering', {event, default_room, already_registered}
+
         to_room = to[default_room]
         if to_room?
           handler[event] = to_room
+        else
+          handler[event] = null
         return if already_registered
         register event
 
