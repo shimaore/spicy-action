@@ -180,7 +180,7 @@ This allows internal servers to dynamically register events (and should eventual
 - the event name
 - an optional default-room name
 
-      @on 'register', =>
+      @on 'register', ->
         {event,default_room} = @data
         already_registered = event of handler
         to_room = to[default_room]
