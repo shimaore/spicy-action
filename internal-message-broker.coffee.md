@@ -187,6 +187,8 @@ This allows internal servers to dynamically register events (and should eventual
         already_registered = event of handler
         debug 'Registering', {event, default_room, already_registered}
 
+        return unless typeof event is 'string'
+
         to_room = to[default_room]
         if to_room?
           handler[event] = to_room
