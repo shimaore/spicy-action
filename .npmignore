@@ -1,2 +1,6 @@
 node_modules/
 local/
+Dockerfile
+Makefile
+test/
+.gitlab-ci.yml
