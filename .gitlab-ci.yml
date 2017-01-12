@@ -1,10 +1,16 @@
 build:
   stage: build
+  tags:
+  - shell
+  only:
+  - master
   script:
   - docker build -t ${CI_REGISTRY_IMAGE}:${PROJECT_TAG} .
 
 test:
   stage: test
+  only:
+  - master
   script:
   - docker run --rm ${CI_REGISTRY_IMAGE}:${PROJECT_TAG} /bin/bash -c 'npm install --only=dev && npm test'
 
