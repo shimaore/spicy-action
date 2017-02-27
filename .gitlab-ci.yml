@@ -1,24 +1,13 @@
+image: gitlab.k-net.fr:1234/shimaore/dark-invention
 build:
   stage: build
-  tags:
-  - shell
   only:
-  - master
+  - tags
+  before_script:
+  - docker login -u gitlab-ci-token -p ${CI_BUILD_TOKEN} ${CI_REGISTRY}
   script:
   - docker build -t ${CI_REGISTRY_IMAGE}:${PROJECT_TAG} .
-
-test:
-  stage: test
-  only:
-  - master
-  script:
   - docker run --rm ${CI_REGISTRY_IMAGE}:${PROJECT_TAG} /bin/bash -c 'npm install --only=dev && npm test'
-
-push:
-  stage: deploy
-  only:
-  - master
-  script:
   - docker push ${CI_REGISTRY_IMAGE}:${PROJECT_TAG}
 
 variables:
