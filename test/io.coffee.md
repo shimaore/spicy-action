@@ -32,7 +32,7 @@ but doesn't currently work (`Ready check failed: Redis connection gone from end 
             @emit configure: support: true
 
           io1.on 'configured', ->
-            request = (require 'superagent-as-promised') require 'superagent'
+            request = require 'superagent'
             request.post 'http://127.0.0.1:53080/_notify/test'
               .type 'json'
               .accept 'json'

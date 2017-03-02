@@ -1,6 +1,6 @@
     @include = ->
 
-      request = (require 'superagent-as-promised') require 'superagent'
+      request = require 'superagent'
 
 Service presence.
 

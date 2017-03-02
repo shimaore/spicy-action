@@ -1,4 +1,4 @@
-    request = (require 'superagent-as-promised') require 'superagent'
+    request = require 'superagent'
     zappa  = require 'zappajs'
     Promise = require 'bluebird'
     chai = require 'chai'

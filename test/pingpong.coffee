@@ -13,7 +13,7 @@ io1.on 'statistics:add', (data) -> console.log 'statistics:add', data
 # io1.emit 'trace', reference:347, ip:'127.0.0.1'
 io1.on 'test', (data) -> console.log 'test', data
 
-request = (require 'superagent-as-promised') require 'superagent'
+request = require 'superagent'
 # request.post 'http://10.42.42.107:8080/_notify/test'
 request.post 'http://127.0.0.1:8080/_notify/test'
   .type 'json'
