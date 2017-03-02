@@ -1,4 +1,3 @@
-image: gitlab.k-net.fr:1234/shimaore/dark-invention
 build:
   stage: build
   only:
