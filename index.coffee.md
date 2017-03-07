@@ -184,4 +184,5 @@ Export
     module.exports = run
     if require.main is module
       cfg = require process.env.CONFIG ? './local/config.json'
-      run cfg
+      throng = require 'throng'
+      throng -> run cfg
