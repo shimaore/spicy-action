@@ -184,5 +184,7 @@ Export
     module.exports = run
     if require.main is module
       cfg = require process.env.CONFIG ? './local/config.json'
-      throng = require 'throng'
-      throng -> run cfg
+      ## See https://github.com/elad/node-cluster-socket.io for why this doesn't work.
+      # throng = require 'throng'
+      # throng -> run cfg
+      run cfg
