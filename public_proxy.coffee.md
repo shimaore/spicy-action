@@ -41,6 +41,7 @@ Provisioning and ruleset(s) databases.
             | rates-[\w-]+
             | cdr-[\w_-]+
             | trace-[\w-]+
+            | reference-[\w-]+
           )/
         ///
       couchdb_proxy = make_couchdb_proxy @cfg.provisioning_base ? @cfg.proxy_base
@@ -50,6 +51,7 @@ Provisioning and ruleset(s) databases.
       @get  '/rates-[\w-]+', @auth, couchdb_proxy
       @get  '/cdr-[\w-]+', @auth, couchdb_proxy
       @get  '/trace-[\w-]+', @auth, couchdb_proxy
+      @get  '/reference-[\w-]+', @auth, couchdb_proxy
 
       @get  couchdb_urls, @auth, couchdb_proxy
       @post couchdb_urls, @auth, couchdb_proxy
