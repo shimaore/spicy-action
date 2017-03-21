@@ -24,7 +24,13 @@ External (public) service
       cfg.ssl.key  ?= fs.readFileSync cfg.ssl.key_file, 'utf-8'  if cfg.ssl.key_file?
       cfg.ssl.cert ?= fs.readFileSync cfg.ssl.cert_file, 'utf-8' if cfg.ssl.cert_file?
 
-      zappa cfg.public_host, cfg.public_port, https:cfg.ssl, ->
+      options =
+        host: cfg.public_host
+        port: cfg.public_port
+        https: cfg.ssl
+      options.server = 'cluster' if cfg.cluster
+
+      zappa options, ->
 
         @use morgan:'combined'
 
@@ -184,7 +190,4 @@ Export
     module.exports = run
     if require.main is module
       cfg = require process.env.CONFIG ? './local/config.json'
-      ## See https://github.com/elad/node-cluster-socket.io for why this doesn't work.
-      # throng = require 'throng'
-      # throng -> run cfg
       run cfg
