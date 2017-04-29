@@ -13,9 +13,19 @@ This is also a Socket.IO server for external users, allowing the propagation of 
     zappa = require 'zappajs'
     redis = require 'socket.io-redis'
 
-    run = (cfg) ->
+    run = (cfg,local = null) ->
 
-      local_pkg = require './local/package.json'
+Support legacy mode.
+
+      unless local?
+        local =
+          pkg: require './local/package.json'
+          auth: './local/auth'
+          public: './local/public'
+
+Default options for `helmet`.
+
+      local.security ?= {}
 
 External (public) service
 =========================
@@ -33,6 +43,7 @@ External (public) service
       zappa options, ->
 
         @use morgan:'combined'
+        @use helmet: local.security
 
         @helper {cfg,pkg}
         @cfg = cfg
@@ -56,7 +67,7 @@ External (public) service
             ok:true
             name:pkg.name
             version:pkg.version
-            local:local_pkg.version
+            local:local.pkg.version
 
 Authentication, Authorization, Token
 ------------------------------------
@@ -69,7 +80,7 @@ Authorization is provided against different backends.
 
 Authenticate, authorize, and create token using local (private) methods.
 
-          './local/auth'
+          local.auth
 
 Authenticate and authorize (against CouchDB backend) ...
 
@@ -84,8 +95,9 @@ Validate that a proper session was created.
           './auth-required'
         ]
 
-        for auth_name in modules
-          auth_module = require auth_name
+        for auth_module in modules
+          if typeof auth_module is 'string'
+            auth_module = require auth_module
           @include auth_module  if auth_module.include?
           @auth.push @wrap auth_module.middleware if auth_module.middleware?
 
@@ -116,7 +128,7 @@ Local services
 
 Order is important here, since these services may fallback to using the `public_proxy` versions with `@next 'route'`.
 
-        @include './local/public'
+        @include local.public
 
 CouchDB reverse proxy with embedded authentication
 --------------------------------------------------
