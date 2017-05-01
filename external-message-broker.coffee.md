@@ -56,6 +56,16 @@ Messages towards `exultant-songs`
         if @session.admin
           @broadcast_to 'dial_calls', 'place-call', @data
 
+Parameters:
+- `name` (the conference name)
+- `endpoint` (the calling endpoint)
+- `destination` (the called number)
+
+      @on 'call-to-conference': ->
+        return unless @data.name? and @data.endpoint? and @data.destination?
+        if @session.admin or (@session?.couchdb_roles? and @data.endpoint in @session.couchdb_roles)
+          @broadcast_to 'dial_calls', 'call-to-conference', @data
+
 Tools
 =====
 

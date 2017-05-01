@@ -53,6 +53,8 @@ Rooms/busses
 List servers that respond
 -------------------------
 
+FIXME: `ping` and `pong` are [listed as reserved](https://socket.io/docs/emit-cheatsheet/).
+
       @on ping: ->
         for room in host_buses
           to[room].emit 'ping', @data
@@ -99,8 +101,8 @@ Messages from `huge-play`
       handler.call = to.calls
       handler.reference = to.calls
 
-Messages from `thinkable-ducks`
--------------------------------
+Messages from `thinkable-ducks`, `huge-play`, …
+-----------------------------------------------
 
       handler['statistics:add'] = to.calls
 
