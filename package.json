@@ -7,21 +7,22 @@
   "dependencies": {
     "basic-auth": "^1.1.0",
     "body-parser": "^1.17.1",
-    "connect-redis": "^3.2.0",
+    "connect-redis": "^3.3.0",
     "cuddly": "^1.1.5",
-    "debug": "^2.6.2",
+    "debug": "^2.6.6",
+    "helmet": "^3.5.0",
     "morgan": "^1.8.1",
     "request": "^2.81.0",
     "socket.io-client": "^1.7.3",
     "socket.io-redis": "^4.0.0",
-    "superagent": "^3.5.0",
+    "superagent": "^3.5.2",
     "zappajs": "^6.4.0"
   },
   "devDependencies": {
     "bluebird": "^3.5.0",
     "chai": "^3.5.0",
-    "coffee-script": "^1.12.4",
-    "mocha": "^3.2.0"
+    "coffee-script": "^1.12.5",
+    "mocha": "^3.3.0"
   },
   "scripts": {
     "prepublish": "coffee -c -M *.coffee.md",

@@ -13,15 +13,7 @@ This is also a Socket.IO server for external users, allowing the propagation of 
     zappa = require 'zappajs'
     redis = require 'socket.io-redis'
 
-    run = (cfg,local = null) ->
-
-Support legacy mode.
-
-      unless local?
-        local =
-          pkg: require './local/package.json'
-          auth: './local/auth'
-          public: './local/public'
+    run = (cfg,local) ->
 
 Default options for `helmet`.
 
