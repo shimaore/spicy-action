@@ -184,7 +184,7 @@ Socket.IO: allow broadcast across multiple Socket.IO servers (through Redis pub/
             ok:true
             name:pkg.name
             version:pkg.version
-            local:local_pkg.version
+            local:local.pkg.version
 
         @include './internal-message-broker'
 
