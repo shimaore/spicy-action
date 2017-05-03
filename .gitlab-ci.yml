@@ -10,4 +10,4 @@ build:
   - docker push ${CI_REGISTRY_IMAGE}:${PROJECT_TAG}
 
 variables:
-  PROJECT_TAG: "9.0.0"
+  PROJECT_TAG: "9.0.1"
