@@ -1,8 +1,6 @@
 Socket.io message-broker for the private (internal) API
 =======================================================
 
-    Cuddly = require 'cuddly'
-
     @include = ->
 
 Connection
@@ -83,7 +81,7 @@ More importantly, `handler` serves as a reference of all known events, thereby a
 Support-class messages
 ----------------------
 
-The events from the `cuddly` module:
+The events from the `cuddly` and `tangible` modules:
 ```
 report_dev
 report_ops
@@ -91,7 +89,7 @@ report_csr
 ```
 or similar events reported by other entities (for example `ccnq4-opensips/src/config/fragments/`).
 
-      for event in Cuddly.events
+      for event in ['report_dev','report_ops','report_csr']
         do (event) ->
           handler[event] = to.support
 
@@ -209,7 +207,7 @@ Set the `notify` configuration parameter of ccnq4-opensips to `https://server.ex
       jsonBody = (require 'body-parser').json {}
 
       @post '/_notify/:msg', jsonBody, ->
-        msg = @params.msg
+        {msg} = @params
         unless handler[msg]?
           debug "No handler for #{msg}", @body
           @json ok:false, ignore:true
@@ -224,6 +222,14 @@ See ccnq4-opensips/src/config/fragments/generic.cfg and src/config/fragments/reg
         if @body?.endpoint?
           room = "endpoint:#{@body.endpoint}"
           @io.to(room).emit msg, @body
+
+        switch msg
+          when 'report_dev'
+            debug.dev 'notify', @body
+          when 'report_ops'
+            debug.ops 'notify', @body
+          when 'report_csr'
+            debug.csr 'notify', @body
 
         @json ok:true
 
@@ -241,6 +247,6 @@ Toolbox
       @leave room
 
     @name = "spicy-action:internal-message-broker"
-    debug = (require 'debug') @name
+    debug = (require 'tangible') @name
     pkg = require './package.json'
     {public_buses,notification_rooms,host_buses,private_buses} = require './buses'

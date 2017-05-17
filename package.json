@@ -8,21 +8,20 @@
     "basic-auth": "^1.1.0",
     "body-parser": "^1.17.1",
     "connect-redis": "^3.3.0",
-    "cuddly": "^1.1.5",
-    "debug": "^2.6.6",
-    "helmet": "^3.5.0",
+    "helmet": "^3.6.0",
     "morgan": "^1.8.1",
     "request": "^2.81.0",
-    "socket.io-client": "^1.7.3",
-    "socket.io-redis": "^4.0.0",
+    "socket.io-client": "^2.0.1",
+    "socket.io-redis": "^5.0.1",
     "superagent": "^3.5.2",
+    "tangible": "^1.4.4",
     "zappajs": "^6.4.0"
   },
   "devDependencies": {
     "bluebird": "^3.5.0",
     "chai": "^3.5.0",
-    "coffee-script": "^1.12.5",
-    "mocha": "^3.3.0"
+    "coffee-script": "^1.12.6",
+    "mocha": "^3.4.1"
   },
   "scripts": {
     "prepublish": "coffee -c -M *.coffee.md",
