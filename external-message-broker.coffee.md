@@ -63,8 +63,26 @@ Parameters:
 
       @on 'call-to-conference': ->
         return unless @data.name? and @data.endpoint? and @data.destination?
-        if @session.admin or (@session?.couchdb_roles? and @data.endpoint in @session.couchdb_roles)
-          @broadcast_to 'dial_calls', 'call-to-conference', @data
+        return unless typeof @data.name is 'string'
+        return unless typeof @data.endpoint is 'string'
+        return unless typeof @data.destination is 'string'
+        return unless @session.admin or (@session?.couchdb_roles? and @data.endpoint in @session.couchdb_roles)
+        @broadcast_to 'dial_calls', 'call-to-conference', @data
+
+      @on 'queuer:get-egress-pool': ->
+        number_domain = @data
+        return unless typeof number_domain is 'string'
+        return unless @session.admin or (@session.couchdb_roles? and "number_domain:#{number_domain}" in @session.couchdb_roles)
+        @broadcast_to 'dial_calls', 'queuer:get-egress-pool', number_domain
+
+      @on 'conference:get-participants': ->
+        return unless @data.number_domain? and @data.short_name?
+        {number_domain,short_name} = @data
+        return unless typeof number_domain is 'string'
+        return unless typeof short_name is 'string'
+        full_name = "#{number_domain}-#{short_name}"
+        return unless @session.admin or (@session.couchdb_roles? and "number_domain:#{number_domain}" in @session.couchdb_roles)
+        @broadcast_to 'dial_calls', 'conference:get-participants', full_name
 
 Tools
 =====
