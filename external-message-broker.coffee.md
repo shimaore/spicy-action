@@ -69,6 +69,12 @@ Parameters:
         return unless @session.admin or (@session?.couchdb_roles? and @data.endpoint in @session.couchdb_roles)
         @broadcast_to 'dial_calls', 'call-to-conference', @data
 
+      @on 'queuer:get-agent-state': ->
+        number = @data
+        return unless typeof number_domain is 'string'
+        return unless @session.admin or (@session.couchdb_roles? and "number:#{number}" in @session.couchdb_roles)
+        @broadcast_to 'dial_calls', 'queuer:get-agent-state', number
+
       @on 'queuer:get-egress-pool': ->
         number_domain = @data
         return unless typeof number_domain is 'string'
