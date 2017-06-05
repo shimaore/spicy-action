@@ -71,7 +71,7 @@ Parameters:
 
       @on 'queuer:get-agent-state': ->
         number = @data
-        return unless typeof number_domain is 'string'
+        return unless typeof number is 'string'
         return unless @session.admin or (@session.couchdb_roles? and "number:#{number}" in @session.couchdb_roles)
         @broadcast_to 'dial_calls', 'queuer:get-agent-state', number
 
