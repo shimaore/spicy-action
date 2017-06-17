@@ -6,21 +6,21 @@
   "main": "index.js",
   "dependencies": {
     "basic-auth": "^1.1.0",
-    "body-parser": "^1.17.1",
+    "body-parser": "^1.17.2",
     "connect-redis": "^3.3.0",
-    "helmet": "^3.6.0",
+    "helmet": "^3.6.1",
     "request": "^2.81.0",
-    "socket.io-client": "^1.7.3",
-    "socket.io-redis": "^4.0.0",
+    "socket.io-client": "^2.0.3",
+    "socket.io-redis": "^5.1.0",
     "superagent": "^3.5.2",
-    "tangible": "^1.4.4",
+    "tangible": "^1.7.0",
     "zappajs": "^6.4.0"
   },
   "devDependencies": {
     "bluebird": "^3.5.0",
-    "chai": "^3.5.0",
+    "chai": "^4.0.2",
     "coffee-script": "^1.12.6",
-    "mocha": "^3.4.1"
+    "mocha": "^3.4.2"
   },
   "scripts": {
     "prepublish": "coffee -c -M *.coffee.md",
