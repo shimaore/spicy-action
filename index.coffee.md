@@ -33,7 +33,6 @@ External (public) service
 
       zappa options, ->
 
-        @use morgan:'combined'
         @use helmet: local.security
 
         @helper {cfg,pkg}
@@ -133,8 +132,6 @@ Internal (services)
 These need to be able to pub/sub.
 
       zappa cfg.internal_host, cfg.internal_port, ->
-
-        @use morgan:'combined'
 
         @helper {cfg,pkg}
         @cfg = cfg
