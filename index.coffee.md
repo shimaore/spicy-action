@@ -99,7 +99,7 @@ Express: Store our session in Redis so that we can offload the Socket.IO piece t
 
         session_store = (require 'connect-redis') @session
         @use session:
-          store: new session_store cfg.redis
+          store: new session_store cfg.session_redis ? cfg.redis
           secret: cfg.session_secret
           resave: true
           unset: 'destroy'
@@ -110,7 +110,7 @@ Express: Store our session in Redis so that we can offload the Socket.IO piece t
 
 Socket.IO: allow broadcast across multiple Socket.IO servers (through Redis pub/sub).
 
-        @io.adapter redis cfg.redis
+        @io.adapter redis cfg.io_redis ? cfg.redis
 
         @include './external-message-broker'
 
@@ -168,7 +168,7 @@ Express: Store our session in Redis so that we can offload the Socket.IO piece t
 
         session_store = (require 'connect-redis') @session
         @use session:
-          store: new session_store cfg.redis
+          store: new session_store cfg.session_redis ? cfg.redis
           secret: cfg.session_secret
           resave: true
           unset: 'destroy'
@@ -176,7 +176,7 @@ Express: Store our session in Redis so that we can offload the Socket.IO piece t
 
 Socket.IO: allow broadcast across multiple Socket.IO servers (through Redis pub/sub).
 
-        @io.adapter redis cfg.redis
+        @io.adapter redis cfg.io_redis ? cfg.redis
 
         @get '/', ->
           @json
