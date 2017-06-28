@@ -3,6 +3,8 @@ Socket.io message-broker for the private (internal) API
 
     @include = ->
 
+      go_crazy = @cfg?.go_crazy
+
 Connection
 ==========
 
@@ -151,7 +153,8 @@ All events are also sent in the rooms/busses optionally specified using the `_in
 
       register = (event) =>
         @on event, ->
-          handler[event]?.emit event, @data
+          unless go_crazy
+            handler[event]?.emit event, @data
 
 Individual messages dispatch.
 
@@ -204,7 +207,8 @@ Set the `notify` configuration parameter of ccnq4-opensips to `https://server.ex
           @json ok:false, ignore:true
           return
 
-        handler[msg].emit msg, @body
+        unless go_crazy
+          handler[msg].emit msg, @body
 
 Forward messages for specific endpoints to customers.
 (This prevents having to figure out how to code the `_in` array in OpenSIPS notifications.)
