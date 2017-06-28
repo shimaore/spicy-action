@@ -27,14 +27,6 @@ Leave request
 Publish
 =======
 
-List servers that respond
--------------------------
-
-      @on ping: ->
-        if @session.admin
-          for room in host_buses
-            @broadcast_to room, 'ping', @data
-
 Messages towards `nifty-ground`
 -------------------------------
 

@@ -48,15 +48,6 @@ Rooms/busses
         do (r) =>
           to[r] = make_to r
 
-List servers that respond
--------------------------
-
-FIXME: `ping` and `pong` are [listed as reserved](https://socket.io/docs/emit-cheatsheet/).
-
-      @on ping: ->
-        for room in host_buses
-          to[room].emit 'ping', @data
-
 Shout: internal (admin) users notification
 ------------------------------------------
 
