@@ -132,7 +132,7 @@ Individual messages dispatch.
 
           @data._in
           .filter (room) -> room.match notification_rooms
-          .forEach (room) ->
+          .forEach (room) =>
             destination ?= @io
             destination = destination.to room
 
