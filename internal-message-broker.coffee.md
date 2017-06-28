@@ -88,7 +88,7 @@ Messages from `huge-play`
 -------------------------
 
       handler.call = to.calls
-      handler.reference = to.calls
+      handler.reference = to.calls  # deprecatd in huge-play 26.3
 
 Messages from `thinkable-ducks`, `huge-play`, …
 -----------------------------------------------
