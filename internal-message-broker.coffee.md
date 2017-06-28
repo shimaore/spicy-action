@@ -3,8 +3,6 @@ Socket.io message-broker for the private (internal) API
 
     @include = ->
 
-      go_crazy = @cfg?.go_crazy
-
 Connection
 ==========
 
@@ -41,27 +39,10 @@ Unsubscribe request
 Rooms/busses
 ------------
 
-      make_to = (room) =>
-        emit: (args...) =>
-          @io.to(room).emit args...
-
       to = {}
       for r in [private_buses...,public_buses...,host_buses...]
         do (r) =>
-          to[r] = make_to r
-
-Shout: internal (admin) users notification
-------------------------------------------
-
-      @on shout: ->
-        to.internal.emit 'shouted', {@id,@data}
-
-Public customer notification
-----------------------------
-
-      @on notify_users: ->
-        to.internal.emit 'notify', @data
-        to.everyone.emit 'notify', @data
+          to[r] = true
 
 Internally mappable services
 ----------------------------
@@ -84,65 +65,53 @@ or similar events reported by other entities (for example `ccnq4-opensips/src/co
 
       for event in ['report_dev','report_ops','report_csr']
         do (event) ->
-          handler[event] = to.support
+          handler[event] = 'support'
 
 Messages from `huge-play`
 -------------------------
 
-      handler.call = to.calls
-      handler.reference = to.calls  # deprecatd in huge-play 26.3
+      handler.call = 'calls'
 
 Messages from `thinkable-ducks`, `huge-play`, …
 -----------------------------------------------
 
-      handler['statistics:add'] = to.calls
+      handler['statistics:add'] = 'calls'
 
 Messages towards `nifty-ground`
 -------------------------------
 
-      handler.trace = to.traces
+      handler.trace = 'traces'
 
 Messages from `nifty-ground`
 ----------------------------
 
-      handler.pong = to.internal
-      handler.trace_started = to.internal
-      handler.trace_completed = to.internal
-      handler.trace_error = to.internal
+      handler.trace_started = 'internal'
+      handler.trace_completed = 'internal'
+      handler.trace_error = 'internal'
 
 Messages towards `ccnq4-opensips`
 ---------------------------------
 
-      handler.location = to.locations
-      handler.locations = to.locations
-      handler.registrants = to.locations
-      handler.presentities = to.locations
-      handler.active_watchers = to.locations
+      handler.location = 'locations'
+      handler.locations = 'locations'
+      handler.registrants = 'locations'
+      handler.presentities = 'locations'
+      handler.active_watchers = 'locations'
 
 Messages from ccnq4-opensips
 ----------------------------
 
 See `ccnq4-opensips/src/client/main.coffee`
 
-      handler['location:update'] = to.internal
-      handler['location:response'] = to.internal
-      handler['locations:response'] = to.internal
-      handler['presentities:response'] = to.internal
-      handler['active_watchers:response'] = to.internal
+      handler['location:update'] = 'internal'
+      handler['location:response'] = 'internal'
+      handler['locations:response'] = 'internal'
+      handler['presentities:response'] = 'internal'
+      handler['active_watchers:response'] = 'internal'
 
 See `ccnq4-opensips/src/registrant/main.coffee`
 
-      handler['registrants:response'] = to.internal
-
-Invalid source IP for registration (if endpoint has `check_ip` enabled but the value of `user_ip` does not match).
-See `ccnq4-opensips/src/config/fragments/register-colocated.cfg`
-
-      handler.script_register = to.support
-
-Indication of rate limiting (if `rate_limit_requests` is enabled for OpenSIPS).
-See `ccnq4-opensips/src/config/fragments/toolbox.cfg`
-
-      handler.pipe_blocked = to.support
+      handler['registrants:response'] = 'internal'
 
 Register events
 ---------------
@@ -153,16 +122,21 @@ All events are also sent in the rooms/busses optionally specified using the `_in
 
       register = (event) =>
         @on event, ->
-          unless go_crazy
-            handler[event]?.emit event, @data
 
 Individual messages dispatch.
 
-          if @data?._in?
-            @data._in = [@data._in] if typeof @data._in is 'string'
-            for room in @data._in when room.match notification_rooms
-              do (room) =>
-                @io.to(room).emit event, @data
+          return unless @data?._in?
+          @data._in = [@data._in] if typeof @data._in is 'string'
+
+          destination = null
+
+          @data._in
+          .filter (room) -> room.match notification_rooms
+          .forEach (room) ->
+            destination ?= @io
+            destination = destination.to room
+
+           destination?.emit event, @data
 
         debug 'Registered event', event
 
@@ -183,11 +157,7 @@ This allows internal servers to dynamically register events (and should eventual
 
         return unless typeof event is 'string'
 
-        to_room = to[default_room]
-        if to_room?
-          handler[event] = to_room
-        else
-          handler[event] = null
+        handler[event] = default_room
         return if already_registered
         register event
 
@@ -202,13 +172,6 @@ Set the `notify` configuration parameter of ccnq4-opensips to `https://server.ex
 
       @post '/_notify/:msg', jsonBody, ->
         {msg} = @params
-        unless handler[msg]?
-          debug "No handler for #{msg}", @body
-          @json ok:false, ignore:true
-          return
-
-        unless go_crazy
-          handler[msg].emit msg, @body
 
 Forward messages for specific endpoints to customers.
 (This prevents having to figure out how to code the `_in` array in OpenSIPS notifications.)
@@ -225,6 +188,18 @@ See ccnq4-opensips/src/config/fragments/generic.cfg and src/config/fragments/reg
             debug.ops 'notify', @body
           when 'report_csr'
             debug.csr 'notify', @body
+
+Invalid source IP for registration (if endpoint has `check_ip` enabled but the value of `user_ip` does not match).
+See `ccnq4-opensips/src/config/fragments/register-colocated.cfg`
+
+          when 'script_register'
+            debug.ops 'script_register', @body
+
+Indication of rate limiting (if `rate_limit_requests` is enabled for OpenSIPS).
+See `ccnq4-opensips/src/config/fragments/toolbox.cfg`
+
+          when 'pipe_blocked'
+            debug.ops 'pipe_blocked', @body
 
         @json ok:true
 
