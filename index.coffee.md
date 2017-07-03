@@ -21,11 +21,9 @@ Default options for `helmet`.
 External (public) service
 =========================
 
-      if cfg.ssl.key_file?
-        cfg.ssl ?= {}
+      if cfg.ssl?.key_file?
         cfg.ssl.key  ?= fs.readFileSync cfg.ssl.key_file, 'utf-8'
-      if cfg.ssl.cert_file?
-        cfg.ssl ?= {}
+      if cfg.ssl?.cert_file?
         cfg.ssl.cert ?= fs.readFileSync cfg.ssl.cert_file, 'utf-8'
 
       options =
