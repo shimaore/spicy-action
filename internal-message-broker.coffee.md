@@ -174,32 +174,10 @@ Set the `notify` configuration parameter of ccnq4-opensips to `https://server.ex
         {msg} = @params
 
 Forward messages for specific endpoints to customers.
-(This prevents having to figure out how to code the `_in` array in OpenSIPS notifications.)
-See ccnq4-opensips/src/config/fragments/generic.cfg and src/config/fragments/register-colocated.cfg
 
         if @body?.endpoint?
           room = "endpoint:#{@body.endpoint}"
           @io.to(room).emit msg, @body
-
-        switch msg
-          when 'report_dev'
-            debug.dev 'notify', @body
-          when 'report_ops'
-            debug.ops 'notify', @body
-          when 'report_csr'
-            debug.csr 'notify', @body
-
-Invalid source IP for registration (if endpoint has `check_ip` enabled but the value of `user_ip` does not match).
-See `ccnq4-opensips/src/config/fragments/register-colocated.cfg`
-
-          when 'script_register'
-            debug.ops 'script_register', @body
-
-Indication of rate limiting (if `rate_limit_requests` is enabled for OpenSIPS).
-See `ccnq4-opensips/src/config/fragments/toolbox.cfg`
-
-          when 'pipe_blocked'
-            debug.ops 'pipe_blocked', @body
 
         @json ok:true
 
