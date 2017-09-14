@@ -67,6 +67,12 @@ Parameters:
         return unless @session.admin or (@session.couchdb_roles? and "number:#{number}" in @session.couchdb_roles)
         @broadcast_to 'dial_calls', 'queuer:log-agent-out', number
 
+      @on 'queuer:log-agent-in': ->
+        number = @data
+        return unless typeof number is 'string'
+        return unless @session.admin or (@session.couchdb_roles? and "number:#{number}" in @session.couchdb_roles)
+        @broadcast_to 'dial_calls', 'queuer:log-agent-in', number
+
       @on 'queuer:get-agent-state': ->
         number = @data
         return unless typeof number is 'string'
