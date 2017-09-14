@@ -1,7 +1,5 @@
     @include = ->
 
-      request = require 'superagent'
-
 Service presence.
 
       @get '/_spicy_action', @auth, ->
