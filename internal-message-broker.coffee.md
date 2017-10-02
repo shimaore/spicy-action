@@ -161,12 +161,8 @@ This allows internal servers to dynamically register events (and should eventual
         return if already_registered
         register event
 
-Push notifications from ccnq4-opensips
---------------------------------------
-
-OpenSIPS doesn't support Socket.io but we're proxying its push notifications.
-
-Set the `notify` configuration parameter of ccnq4-opensips to `https://server.example.net/_notify` for full effect.
+Push notifications
+------------------
 
       jsonBody = (require 'body-parser').json {}
 
