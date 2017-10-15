@@ -44,22 +44,47 @@ Messages towards `ccnq4-opensips`
 Messages towards `exultant-songs`
 ---------------------------------
 
+      validate_place_call = (session,data) ->
+        return false unless data.endpoint? and data.destination?
+        return false unless typeof data.endpoint is 'string'
+        return false unless typeof data.destination is 'string'
+        return false unless session.admin or (session?.couchdb_roles? and data.endpoint in session.couchdb_roles)
+        true
+
       @on 'place-call': ->
-        if @session.admin
-          @broadcast_to 'dial_calls', 'place-call', @data
+        return unless validate_place_call @session, @data
+        @broadcast_to 'dial_calls', 'place-call', @data
+
+      @post '/_notify/place-call', @auth, jsonBody, ->
+        unless validate_place_call @session, @body
+          @res.status = 400
+          @json failed:true
+          return
+        @io.to('dial_calls').emit 'place-call', @body
 
 Parameters:
 - `name` (the conference name)
 - `endpoint` (the calling endpoint)
 - `destination` (the called number)
 
+      validate_call_to_conference = (session,data) ->
+        return false unless data.name? and data.endpoint? and data.destination?
+        return false unless typeof data.name is 'string'
+        return false unless typeof data.endpoint is 'string'
+        return false unless typeof data.destination is 'string'
+        return false unless session.admin or (session?.couchdb_roles? and data.endpoint in session.couchdb_roles)
+        true
+
       @on 'call-to-conference': ->
-        return unless @data.name? and @data.endpoint? and @data.destination?
-        return unless typeof @data.name is 'string'
-        return unless typeof @data.endpoint is 'string'
-        return unless typeof @data.destination is 'string'
-        return unless @session.admin or (@session?.couchdb_roles? and @data.endpoint in @session.couchdb_roles)
+        return unless validate_call_to_conference @session, @data
         @broadcast_to 'dial_calls', 'call-to-conference', @data
+
+      @post '/_notify/call-to-conference', @auth, jsonBody, ->
+        unless validate_call_to_conference @session, @body
+          @res.status = 400
+          @json failed:true
+          return
+        @io.to('dial_calls').emit 'call-to-conference', @body
 
       @on 'queuer:log-agent-out': ->
         number = @data
@@ -158,3 +183,4 @@ Unsubscribe
     @name = "spicy-action:external-message-broker"
     pkg = require './package.json'
     {public_buses,notification_rooms,host_buses,private_buses} = require './buses'
+    jsonBody = (require 'body-parser').json {}
