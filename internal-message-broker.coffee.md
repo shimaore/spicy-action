@@ -166,36 +166,39 @@ Push notifications
 
       jsonBody = (require 'body-parser').json {}
 
+Forward registered messages.
+
       @post '/_notify/:msg', jsonBody, ->
         {msg} = @params
 
-Forward registered messages
+        unless msg of handler
+          @res.status 404
+          @res.end()
+          return
 
-        if @body? and msg of handler
-          room = handler[msg]
-          @io.to(room).emit msg, @body
-          @json ok:true
+        unless @body?
+          @res.status 400
+          @res.end()
+          return
 
-        else
-          @res.status = 400
-          @json failed:true
-
+        room = handler[msg]
+        @io.to(room).emit msg, @body
+        @json ok:true
         return
+
+Forward messages for specific endpoints to customers.
 
       @post '/_notify_endpoint/:msg', jsonBody, ->
         {msg} = @params
 
-Forward messages for specific endpoints to customers.
+        unless @body?.endpoint?
+          @res.status 400
+          @res.end()
+          return
 
-        if @body?.endpoint?
-          room = "endpoint:#{@body.endpoint}"
-          @io.to(room).emit msg, @body
-          @json ok:true
-
-        else
-          @res.status = 400
-          @json failed:true
-
+        room = "endpoint:#{@body.endpoint}"
+        @io.to(room).emit msg, @body
+        @json ok:true
         return
 
 Toolbox

@@ -57,10 +57,11 @@ Messages towards `exultant-songs`
 
       @post '/_notify/place-call', @auth, jsonBody, ->
         unless validate_place_call @session, @body
-          @res.status = 400
-          @json failed:true
+          @res.status 400
+          @res.end()
           return
         @io.to('dial_calls').emit 'place-call', @body
+        @json ok:true
 
 Parameters:
 - `name` (the conference name)
@@ -81,10 +82,11 @@ Parameters:
 
       @post '/_notify/call-to-conference', @auth, jsonBody, ->
         unless validate_call_to_conference @session, @body
-          @res.status = 400
-          @json failed:true
+          @res.status 400
+          @res.end()
           return
         @io.to('dial_calls').emit 'call-to-conference', @body
+        @json ok:true
 
       @on 'queuer:log-agent-out': ->
         number = @data
