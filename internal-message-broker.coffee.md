@@ -63,9 +63,9 @@ report_csr
 ```
 or similar events reported by other entities (for example `ccnq4-opensips/src/config/fragments/`).
 
-      for event in ['report_dev','report_ops','report_csr']
-        do (event) ->
-          handler[event] = 'support'
+      handler.report_dev = 'support'
+      handler.report_ops = 'support'
+      handler.report_csr = 'support'
 
 Messages from `huge-play`
 -------------------------
