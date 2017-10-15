@@ -169,13 +169,34 @@ Push notifications
       @post '/_notify/:msg', jsonBody, ->
         {msg} = @params
 
+Forward registered messages
+
+        if @body? and msg of handler
+          room = handler[msg]
+          @io.to(room).emit msg, @body
+          @json ok:true
+
+        else
+          @res.status = 400
+          @json failed:true
+
+        return
+
+      @post '/_notify_endpoint/:msg', jsonBody, ->
+        {msg} = @params
+
 Forward messages for specific endpoints to customers.
 
         if @body?.endpoint?
           room = "endpoint:#{@body.endpoint}"
           @io.to(room).emit msg, @body
+          @json ok:true
 
-        @json ok:true
+        else
+          @res.status = 400
+          @json failed:true
+
+        return
 
 Toolbox
 =======
