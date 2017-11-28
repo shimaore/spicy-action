@@ -143,6 +143,8 @@ Individual messages dispatch.
       for event of handler
         do (event) => register event
 
+      return
+
 Dynamically register events
 ---------------------------
 
@@ -208,11 +210,13 @@ Toolbox
       room = @data
       return unless typeof room is 'string'
       @join room
+      return
 
     unsubscribe = ->
       root = @data
       return unless typeof room is 'string'
       @leave room
+      return
 
     @name = "spicy-action:internal-message-broker"
     debug = (require 'tangible') @name

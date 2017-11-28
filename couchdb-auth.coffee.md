@@ -1,11 +1,12 @@
 Authenticate and authorize using a CouchDB backend
 --------------------------------------------------
 
+    seem = require 'seem'
     request = require 'superagent'
 
     basic_auth = require 'basic-auth'
 
-    @middleware = ->
+    @middleware = seem ->
 
 Skip if the session is already established.
 
@@ -21,6 +22,10 @@ Skip if the user is not trying to authenticate using Basic.
         @next()
         return
 
+      if not @cfg.auth_base?
+        @next()
+        return
+
 Try our method.
 
 * cfg.admin_role (string) Role used to indicate a CouchDB account should be considered admin (see session.admin ). Default: `_admin`
@@ -29,7 +34,7 @@ Try our method.
 
 * cfg.auth_base (URL without authentication) CouchDB base used to authenticate users (when basic auth is used).
 
-      request
+      yield request
       .get "#{ @cfg.auth_base }/_session"
       .accept 'json'
       .auth user.name, user.pass
@@ -40,7 +45,5 @@ Try our method.
 
 Do not mask errors in the remaining middlewares.
 
-      .then =>
-        @next()
-      .catch (error) ->
-        throw error
+      @next()
+      return

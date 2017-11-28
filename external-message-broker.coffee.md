@@ -167,6 +167,7 @@ For status, client might use the ack response, or wait for the `joined` event.
         @emit joined: room
 
       @ack? ok
+      return
 
 Unsubscribe
 -----------
@@ -181,6 +182,7 @@ Unsubscribe
 
       return unless typeof room is 'string'
       @leave room
+      return
 
     @name = "spicy-action:external-message-broker"
     pkg = require './package.json'
