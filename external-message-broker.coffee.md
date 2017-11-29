@@ -41,8 +41,23 @@ Messages towards `ccnq4-opensips`
         if @session.admin
           @broadcast_to 'locations', 'location', @data
 
-Messages towards `exultant-songs`
----------------------------------
+Messages towards the queuer in `huge-play`
+------------------------------------------
+
+      identity = (x) -> x
+
+      register_message = (msg,bus,validate,mapper = identity) =>
+        @on msg: ->
+          return unless validate @session, @data
+          @broadcast_to bus, msg, mapper @data
+
+        @post "/_notify/#{msg}", @auth, jsonBody, ->
+          unless validate @session, @body
+            @res.status 400
+            @res.end()
+            return
+          @io.to(bus).emit msg, mapper @body
+          @json ok:true
 
       validate_place_call = (session,data) ->
         return false unless data.endpoint? and data.destination?
@@ -51,17 +66,7 @@ Messages towards `exultant-songs`
         return false unless session.admin or (session?.couchdb_roles? and data.endpoint in session.couchdb_roles)
         true
 
-      @on 'place-call': ->
-        return unless validate_place_call @session, @data
-        @broadcast_to 'dial_calls', 'place-call', @data
-
-      @post '/_notify/place-call', @auth, jsonBody, ->
-        unless validate_place_call @session, @body
-          @res.status 400
-          @res.end()
-          return
-        @io.to('dial_calls').emit 'place-call', @body
-        @json ok:true
+      register_message 'dial_calls', 'place-call', validate_place_call
 
 Parameters:
 - `name` (the conference name)
@@ -76,50 +81,41 @@ Parameters:
         return false unless session.admin or (session?.couchdb_roles? and data.endpoint in session.couchdb_roles)
         true
 
-      @on 'call-to-conference': ->
-        return unless validate_call_to_conference @session, @data
-        @broadcast_to 'dial_calls', 'call-to-conference', @data
+      register_message 'dial_calls', 'call-to-conference', validate_call_to_conference
 
-      @post '/_notify/call-to-conference', @auth, jsonBody, ->
-        unless validate_call_to_conference @session, @body
-          @res.status 400
-          @res.end()
-          return
-        @io.to('dial_calls').emit 'call-to-conference', @body
-        @json ok:true
+Queuer messages
 
-      @on 'queuer:log-agent-out': ->
-        number = @data
-        return unless typeof number is 'string'
-        return unless @session.admin or (@session.couchdb_roles? and "number:#{number}" in @session.couchdb_roles)
-        @broadcast_to 'dial_calls', 'queuer:log-agent-out', number
 
-      @on 'queuer:log-agent-in': ->
-        number = @data
-        return unless typeof number is 'string'
-        return unless @session.admin or (@session.couchdb_roles? and "number:#{number}" in @session.couchdb_roles)
-        @broadcast_to 'dial_calls', 'queuer:log-agent-in', number
+      validate_agent = (session,number) ->
+        return false unless typeof number is 'string'
+        return false unless session.admin or (session.couchdb_roles? and "number:#{number}" in session.couchdb_roles)
+        true
 
-      @on 'queuer:get-agent-state': ->
-        number = @data
-        return unless typeof number is 'string'
-        return unless @session.admin or (@session.couchdb_roles? and "number:#{number}" in @session.couchdb_roles)
-        @broadcast_to 'dial_calls', 'queuer:get-agent-state', number
+      register_message 'dial_calls', 'queuer:log-agent-out', validate_agent
 
-      @on 'queuer:get-egress-pool': ->
-        number_domain = @data
-        return unless typeof number_domain is 'string'
-        return unless @session.admin or (@session.couchdb_roles? and "number_domain:#{number_domain}" in @session.couchdb_roles)
-        @broadcast_to 'dial_calls', 'queuer:get-egress-pool', number_domain
+      register_message 'dial_calls', 'queuer:log-agent-in', validate_agent
 
-      @on 'conference:get-participants': ->
-        return unless @data.number_domain? and @data.short_name?
-        {number_domain,short_name} = @data
+      register_message 'dial_calls', 'queuer:get-agent-state', validate_agent
+
+      validate_number_domain = (session,number_domain) ->
+        return false unless typeof number_domain is 'string'
+        return false unless session.admin or (session.couchdb_roles? and "number_domain:#{number_domain}" in session.couchdb_roles)
+        true
+
+      register_message 'dial_calls', 'queuer:get-egress-pool', validate_number_domain
+
+      validate_participants = (session,data) ->
+        return unless data.number_domain? and data.short_name?
+        {number_domain,short_name} = data
         return unless typeof number_domain is 'string'
         return unless typeof short_name is 'string'
+        return unless session.admin or (session.couchdb_roles? and "number_domain:#{number_domain}" in session.couchdb_roles)
+
+      map_participants = (data) ->
+        {number_domain,short_name} = data
         full_name = "#{number_domain}-#{short_name}"
-        return unless @session.admin or (@session.couchdb_roles? and "number_domain:#{number_domain}" in @session.couchdb_roles)
-        @broadcast_to 'dial_calls', 'conference:get-participants', full_name
+
+      register_message 'dial_calls', 'conference:get-participants', validate_participants, map_participants
 
 Tools
 =====
