@@ -47,7 +47,7 @@ Messages towards the queuer in `huge-play`
       identity = (x) -> x
 
       register_message = (msg,bus,validate,mapper = identity) =>
-        @on msg: ->
+        @on msg, ->
           return unless validate @session, @data
           @broadcast_to bus, msg, mapper @data
 
