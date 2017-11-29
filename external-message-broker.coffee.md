@@ -83,6 +83,20 @@ Parameters:
 
       register_message 'dial_calls', 'call-to-conference', validate_call_to_conference
 
+Parameters:
+- `agent` (the requiring, calling, agent) (the actual call might end up routed to a different agent)
+- `destination` (the called number)
+- `tags` (agent selection tags)
+
+      validate_create_queuer_call = (session,data) ->
+        return false unless data.agent? and data.destination?
+        return false unless typeof data.agent is 'string'
+        return false unless typeof data.destination is 'string'
+        return false unless session.admin or (session?.couchdb_roles? and "number:#{data.agent}" in session.couchdb_roles)
+        true
+
+      register_message 'dial_calls', 'create-queuer-call', validate_create_queuer_call
+
 Queuer messages
 
 
