@@ -24,7 +24,7 @@
     "socket.io-client": "^2.0.3"
   },
   "scripts": {
-    "prepublish": "coffee -c -M *.coffee.md",
+    "prepublishOnly": "npm install --only=dev && rm package-lock.json && coffee -c -M *.coffee.md",
     "pretest": "npm install",
     "test": "mocha",
     "version": "./build/gitlab-ci.yml"
