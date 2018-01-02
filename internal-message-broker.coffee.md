@@ -136,7 +136,7 @@ Individual messages dispatch.
             destination ?= @io
             destination = destination.to room
 
-           destination?.emit event, @data
+            destination?.emit event, @data
 
         debug 'Registered event', event
 
