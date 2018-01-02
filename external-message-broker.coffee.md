@@ -117,6 +117,7 @@ Queuer messages
         true
 
       register_message 'dial_calls', 'queuer:get-egress-pool', validate_number_domain
+      register_message 'dial_calls', 'queuer:get-ingress-pool', validate_number_domain
 
       validate_participants = (session,data) ->
         return unless data.number_domain? and data.short_name?
