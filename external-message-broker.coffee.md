@@ -51,7 +51,7 @@ Messages towards the queuer in `huge-play`
           return unless validate @session, @data
           @broadcast_to bus, msg, mapper @data
 
-        @post "/_notify/#{msg}", @auth, jsonBody, ->
+        @post "/_notify/#{msg}", @auth, jsonBody(strict:false), ->
           unless validate @session, @body
             @res.status 400
             @res.end()
@@ -198,4 +198,4 @@ Unsubscribe
     @name = "spicy-action:external-message-broker"
     pkg = require './package.json'
     {public_buses,notification_rooms,host_buses,private_buses} = require './buses'
-    jsonBody = (require 'body-parser').json {}
+    jsonBody = (require 'body-parser').json

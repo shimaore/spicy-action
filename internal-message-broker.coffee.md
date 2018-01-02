@@ -166,11 +166,11 @@ This allows internal servers to dynamically register events (and should eventual
 Push notifications
 ------------------
 
-      jsonBody = (require 'body-parser').json {}
+      jsonBody = (require 'body-parser').json
 
 Forward registered messages.
 
-      @post '/_notify/:msg', jsonBody, ->
+      @post '/_notify/:msg', jsonBody(strict:false), ->
         {msg} = @params
 
         unless msg of handler
@@ -190,7 +190,7 @@ Forward registered messages.
 
 Forward messages for specific endpoints to customers.
 
-      @post '/_notify_endpoint/:msg', jsonBody, ->
+      @post '/_notify_endpoint/:msg', jsonBody(strict:true), ->
         {msg} = @params
 
         unless @body?.endpoint?
