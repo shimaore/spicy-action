@@ -10,7 +10,6 @@ This is also a Socket.IO server for external users, allowing the propagation of 
     fs = require 'fs'
 
     zappa = require 'zappajs'
-    redis = require 'socket.io-redis'
     connect_redis = require 'connect-redis'
 
     run = (cfg,local) ->
@@ -112,13 +111,6 @@ Express: Store our session in Redis so that we can offload the Socket.IO piece t
                 maxAge: cfg.session_maxage ? 30*60*1000
                 secure: cfg.session_secure ? true
 
-Socket.IO: allow broadcast across multiple Socket.IO servers (through Redis pub/sub).
-
-          io_redis = cfg.io_redis ? cfg.redis
-          if io_redis?
-            @io.adapter redis io_redis
-            @include './external-message-broker'
-
 Local services
 --------------
 
@@ -181,13 +173,6 @@ Express: Store our session in Redis so that we can offload the Socket.IO piece t
               resave: true
               unset: 'destroy'
               saveUninitialized: false
-
-Socket.IO: allow broadcast across multiple Socket.IO servers (through Redis pub/sub).
-
-          io_redis = cfg.io_redis ? cfg.redis
-          if io_redis?
-            @io.adapter redis io_redis
-            @include './internal-message-broker'
 
           @get '/', ->
             @json
