@@ -31,7 +31,7 @@ External (public) service
           host: cfg.public_host
           port: cfg.public_port
           https: cfg.ssl
-        options.server = 'cluster' if cfg.cluster
+          io: false
 
         zappa options, ->
 
