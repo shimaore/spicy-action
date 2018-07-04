@@ -1,3 +1,0 @@
-#!/bin/bash
-sed -i -e "s/^  PROJECT_TAG:.*$/  PROJECT_TAG: \"`jq -r .version package.json`\"/" .gitlab-ci.yml
-git add .gitlab-ci.yml
