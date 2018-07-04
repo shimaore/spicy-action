@@ -4,3 +4,4 @@ build:
   script:
   - npm install
   - npm test
+  - npm audit
