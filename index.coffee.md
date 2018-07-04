@@ -126,62 +126,6 @@ CouchDB reverse proxy with embedded authentication
           return
 
 
-Internal (services)
-====================
-
-These need to be able to pub/sub.
-
-      if cfg.internal_host? and cfg.internal_port?
-        zappa cfg.internal_host, cfg.internal_port, ->
-
-          @helper {cfg,pkg}
-          @cfg = cfg
-
-Authentication, Authorization, Token
-------------------------------------
-
-          @auth = []
-
-          modules = [
-
-Authenticate, authorize, and create token.
-
-            './couchdb-auth'
-            './create-token'
-
-Fail if not authenticated.
-
-            './auth-required'
-          ]
-
-          for auth_name in modules
-            auth_module = require auth_name
-            @include auth_module  if auth_module.include?
-            @auth.push @wrap auth_module.middleware if auth_module.middleware?
-
-Session
--------
-
-Express: Store our session in Redis so that we can offload the Socket.IO piece to a different server if needed.
-
-          session_redis = cfg.session_redis ? cfg.redis
-          if session_redis? and cfg.session_secret
-            session_store = connect_redis @session
-            @use session:
-              store: new session_store session_redis
-              secret: cfg.session_secret
-              resave: true
-              unset: 'destroy'
-              saveUninitialized: false
-
-          @get '/', ->
-            @json
-              ok:true
-              name:pkg.name
-              version:pkg.version
-              local:local.pkg.version
-
-
 Export
 ======
 
