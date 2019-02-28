@@ -9,7 +9,7 @@ This is also a Socket.IO server for external users, allowing the propagation of 
     @name = "spicy-action:index"
     fs = require 'fs'
 
-    zappa = require 'zappajs'
+    zappa = require 'core-zappa'
     connect_redis = require 'connect-redis'
 
     run = (cfg,local) ->
@@ -107,7 +107,7 @@ Express: Store our session in Redis so that we can offload the Socket.IO piece t
 Local services
 --------------
 
-Order is important here, since these services may fallback to using the `public_proxy` versions with `@next 'route'`.
+Order is important here, since these services may fallback to using the `public_proxy` versions with `next 'route'`.
 
           @include local.public
 
@@ -121,7 +121,7 @@ Order is important here, since these services may fallback to using the `public_
 CouchDB reverse proxy with embedded authentication
 --------------------------------------------------
 
-          @include './public_proxy'
+          @include require './public_proxy'
 
           return
 

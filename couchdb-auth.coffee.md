@@ -11,7 +11,6 @@ Authenticate and authorize using a CouchDB backend
 Skip if the session is already established.
 
       if @session.couchdb_token?
-        @next()
         return
 
 Skip if the user is not trying to authenticate using Basic.
@@ -19,11 +18,9 @@ Skip if the user is not trying to authenticate using Basic.
       user = basic_auth @req
 
       if not user?
-        @next()
         return
 
       if not @cfg.auth_base?
-        @next()
         return
 
 Try our method.
@@ -45,5 +42,4 @@ Try our method.
 
 Do not mask errors in the remaining middlewares.
 
-      @next()
       return

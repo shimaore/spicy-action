@@ -6,21 +6,18 @@ The session is validated by ensuring that both the username and the roles array 
     @middleware = create_token = ->
 
       if @session.couchdb_token?
-        @next()
         return
 
       unless @session.couchdb_username? and @session.couchdb_roles?
         @session.couchdb_username = null
         @session.couchdb_roles = null
-        @next()
         return
 
       unless @cfg.couchdb_secret?
-        @next()
         return
 
       @session.couchdb_token = hex_hmac_sha1 @cfg.couchdb_secret, @session.couchdb_username
-      @next()
+      return
 
     crypto = require 'crypto'
     hex_hmac_sha1 = (key,value) ->

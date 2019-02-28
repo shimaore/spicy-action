@@ -10,8 +10,7 @@
 Report error to the next middleware.
 
         report = (error) =>
-          @next "Report: #{error}"
-          return
+          throw new Error "Report: #{error}"
 
 Failover
 ========
@@ -70,5 +69,8 @@ We do not catch errors on the response: it's too late anyhow.
         return
 
     module.exports = make_proxy
-    module.exports.timeout = process.env.TIMEOUT ? 2000
-    module.exports.last_timeout = process.env.LAST_TIMEOUT ? 100000
+    integer = (n) ->
+      v =parseInt n, 10
+      if isNaN v then null else v
+    module.exports.timeout = (integer process.env.TIMEOUT) ? 2000
+    module.exports.last_timeout = (integer process.env.LAST_TIMEOUT) ? 100000

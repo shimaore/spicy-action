@@ -1,6 +1,5 @@
     @middleware = auth_required = ->
       if @session.couchdb_token?
-        @next()
         return
       @session = null
       @res

@@ -1,5 +1,5 @@
     request = require 'superagent'
-    zappa  = require 'zappajs'
+    zappa  = require 'core-zappa'
     sleep = (timeout) -> new Promise (resolve) -> setTimeout resolve, timeout
     chai = require 'chai'
     chai.should()
@@ -13,7 +13,7 @@
       silly_port = port++
       crazy_port = port++
 
-      backend = frontend = silly = null
+      backend = failing_backend = frontend = silly = crazy = null
 
       before ->
 
@@ -99,6 +99,13 @@ Provide the answer before timeout.
           proxy = make_proxy ["http://127.0.1.0:#{failing_port}"]
           @get /./, ->
             proxy.call this, @request.headers
+
+      after ->
+        backend.server.close()
+        failing_backend.server.close()
+        frontend.server.close()
+        silly.server.close()
+        crazy.server.close()
 
       it 'should failover on service rejection', ->
         request
