@@ -11,8 +11,8 @@ Multiple-backends interface for CouchDB
 
 Using [proxy authentication](http://docs.couchdb.org/en/latest/api/server/authn.html#api-auth-proxy) in CouchDB.
 
-          headers['X-Auth-CouchDB-Roles'] = @session.couchdb_roles.join ','
-          headers['X-Auth-CouchDB-Token'] = @session.couchdb_token
-          headers['X-Auth-CouchDB-UserName'] = @session.couchdb_username
+          headers['X-Auth-CouchDB-Roles'] = @req.session.couchdb_roles.join ','
+          headers['X-Auth-CouchDB-Token'] = @req.session.couchdb_token
+          headers['X-Auth-CouchDB-UserName'] = @req.session.couchdb_username
 
           proxy.call this, headers

@@ -11,6 +11,7 @@ This is also a Socket.IO server for external users, allowing the propagation of 
 
     zappa = require 'core-zappa'
     connect_redis = require 'connect-redis'
+    session = require 'express-session'
 
     run = (cfg,local) ->
 
@@ -42,15 +43,15 @@ External (public) service
 
           @helper user_data: ->
             res =
-              ok: @session?.couchdb_token?
-              username: @session?.couchdb_username
-              full_name: @session?.full_name
-              roles: @session?.couchdb_roles
-              admin: @session?.admin
-              locale: @session?.locale
-              timezone: @session?.timezone
-            if @session.user_params?
-              for own k,v of @session.user_params
+              ok: @req.session?.couchdb_token?
+              username: @req.session?.couchdb_username
+              full_name: @req.session?.full_name
+              roles: @req.session?.couchdb_roles
+              admin: @req.session?.admin
+              locale: @req.session?.locale
+              timezone: @req.session?.timezone
+            if @req.session?.user_params?
+              for own k,v of @req.session.user_params
                 res[k] ?= v
             res
 
@@ -93,8 +94,8 @@ Express: Store our session in Redis so that we can offload the Socket.IO piece t
 
           session_redis = cfg.session_redis ? cfg.redis
           if session_redis? and cfg.session_secret?
-            session_store = connect_redis @session
-            @use session:
+            session_store = connect_redis session
+            @use session
               store: new session_store session_redis
               secret: cfg.session_secret
               resave: true

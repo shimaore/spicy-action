@@ -1,7 +1,7 @@
     @middleware = auth_required = ->
-      if @session.couchdb_token?
+      if @req.session.couchdb_token?
         return
-      @session = null
+      @req.session = null
       @res
         .status 401
         .set 'WWW-Authenticate': "Basic: realm=#{@pkg.name}"

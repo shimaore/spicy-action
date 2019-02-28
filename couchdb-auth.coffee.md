@@ -10,7 +10,7 @@ Authenticate and authorize using a CouchDB backend
 
 Skip if the session is already established.
 
-      if @session.couchdb_token?
+      if @req.session.couchdb_token?
         return
 
 Skip if the user is not trying to authenticate using Basic.
@@ -36,9 +36,9 @@ Try our method.
       .accept 'json'
       .auth user.name, user.pass
       .then ({body}) =>
-        @session.couchdb_username = body.userCtx.name
-        @session.couchdb_roles = body.userCtx.roles
-        @session.admin = admin_role in @session.couchdb_roles
+        @req.session.couchdb_username = body.userCtx.name
+        @req.session.couchdb_roles = body.userCtx.roles
+        @req.session.admin = admin_role in @req.session.couchdb_roles
 
 Do not mask errors in the remaining middlewares.
 

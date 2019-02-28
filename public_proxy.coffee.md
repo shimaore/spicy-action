@@ -6,7 +6,7 @@ Service presence.
         @json @user_data()
 
       @post '/_logout', ->
-        @session.regenerate (err) =>
+        @req.session.regenerate (err) =>
           if err
             @res.status 500
             @json ok: false
