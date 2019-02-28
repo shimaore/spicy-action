@@ -10,7 +10,9 @@
 Report error to the next middleware.
 
         report = (error) =>
-          throw new Error "Report: #{error}"
+          @res.status 504
+          @res.end()
+          return
 
 Failover
 ========
