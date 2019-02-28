@@ -6,7 +6,7 @@ docker run --rm -p 6379:6379 shimaore/redis-server
 
 but doesn't currently work (`Ready check failed: Redis connection gone from end event. at RedisClient.on_info_cmd (node_modules/socket.io-redis/node_modules/redis/index.js:368:35))`).
 
-    Promise = require 'bluebird'
+    sleep = (timeout) -> new Promise (resolve) -> setTimeout resolve, timeout
     describe 'internal', ->
       it.skip "should not propagate `internal` messages on the private port if we did not subscribe to `internal`", (done) ->
         run = require '../index'
@@ -24,7 +24,7 @@ but doesn't currently work (`Ready check failed: Redis connection gone from end 
 
         @timeout 10*1000
 
-        Promise.delay 5000
+        sleep 5000
         .then ->
           io1 = (require 'socket.io-client') 'http://127.0.0.1:53080'
 
@@ -38,7 +38,7 @@ but doesn't currently work (`Ready check failed: Redis connection gone from end 
               .accept 'json'
               .send testing:true
               .then ->
-                Promise.delay 1500
+                sleep 1500
               .then ->
                 done()
 

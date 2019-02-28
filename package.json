@@ -11,20 +11,21 @@
     "connect-redis": "^3.3.2",
     "helmet": "^3.8.2",
     "request": "^2.83.0",
-    "superagent": "^3.6.2",
-    "tangible": "^2.0.0",
+    "superagent": "^4.1.0",
+    "tangible": "^3.0.0",
     "zappajs": "^6.5.0"
   },
   "devDependencies": {
-    "bluebird": "^3.5.0",
     "chai": "^4.1.2",
     "coffeescript": "^2.3.1",
-    "mocha": "^5.2.0"
+    "mocha": "^6.0.2",
+    "nyc": "^13.3.0"
   },
   "scripts": {
-    "build": "npm install --only=dev && rm package-lock.json && coffee -c -M *.coffee.md",
+    "build": "npm install --only=dev && rm package-lock.json && coffee -c *.coffee.md",
     "prepublishOnly": "npm run build",
-    "test": "mocha"
+    "pretest": "npm run build && coffee -c test/*.coffee.md",
+    "test": "nyc mocha"
   },
   "author": "Stéphane Alnet <stephane@shimaore.net> (http://stephane.shimaore.net/)",
   "license": "Unlicense",

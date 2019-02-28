@@ -1,6 +1,6 @@
     request = require 'superagent'
     zappa  = require 'zappajs'
-    Promise = require 'bluebird'
+    sleep = (timeout) -> new Promise (resolve) -> setTimeout resolve, timeout
     chai = require 'chai'
     chai.should()
 
@@ -45,38 +45,38 @@ Just hang.
 Provide the answer before timeout.
 
           @get '/slow', ->
-            Promise.delay 1023
+            sleep 1023
             .then =>
               @json slow:true
 
           @get '/too-slow', ->
-            Promise.delay 8000
+            sleep 8000
             .then =>
               @json slow:true
 
           @get '/headers-but-slow', ->
             @res.writeHead 200, 'Content-Type':'application/json'
-            Promise.delay 500
+            sleep 500
             .then =>
               @res.write '{'
             .then =>
-              Promise.delay 1700
+              sleep 1700
             .then =>
               @res.write '"to'
             .then =>
-              Promise.delay 1700
+              sleep 1700
             .then =>
               @res.write 'o":'
             .then =>
-              Promise.delay 1700
+              sleep 1700
             .then =>
               @res.write 'tru'
             .then =>
-              Promise.delay 1700
+              sleep 1700
             .then =>
               @res.write 'e}'
             .then =>
-              Promise.delay 1700
+              sleep 1700
             .then =>
               @res.end()
 
