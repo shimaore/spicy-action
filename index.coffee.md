@@ -54,13 +54,6 @@ External (public) service
                 res[k] ?= v
             res
 
-          @get '/', ->
-            @json
-              ok:true
-              name:pkg.name
-              version:pkg.version
-              local:local.pkg.version
-
 Authentication, Authorization, Token
 ------------------------------------
 
@@ -117,6 +110,13 @@ Local services
 Order is important here, since these services may fallback to using the `public_proxy` versions with `@next 'route'`.
 
           @include local.public
+
+          @get '/', ->
+            @json
+              ok:true
+              name:pkg.name
+              version:pkg.version
+              local:local.pkg.version
 
 CouchDB reverse proxy with embedded authentication
 --------------------------------------------------
