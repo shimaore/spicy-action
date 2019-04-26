@@ -84,7 +84,7 @@ Validate that a proper session was created.
           for auth_module in modules
             if typeof auth_module is 'string'
               auth_module = require auth_module
-            @include auth_module  if auth_module.include?
+            await @include auth_module  if auth_module.include?
             @auth.push @wrap auth_module.middleware if auth_module.middleware?
 
 Session
@@ -110,7 +110,7 @@ Local services
 
 Order is important here, since these services may fallback to using the `public_proxy` versions with `next 'route'`.
 
-          @include local.public
+          await @include local.public
 
           @get '/', ->
             @json
@@ -122,7 +122,7 @@ Order is important here, since these services may fallback to using the `public_
 CouchDB reverse proxy with embedded authentication
 --------------------------------------------------
 
-          @include require './public_proxy'
+          await @include require './public_proxy'
 
           return
 

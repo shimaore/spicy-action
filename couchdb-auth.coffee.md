@@ -1,12 +1,11 @@
 Authenticate and authorize using a CouchDB backend
 --------------------------------------------------
 
-    seem = require 'seem'
     request = require 'superagent'
 
     basic_auth = require 'basic-auth'
 
-    @middleware = seem ->
+    @middleware = ->
 
 Skip if the session is already established.
 
@@ -31,14 +30,14 @@ Try our method.
 
 * cfg.auth_base (URL without authentication) CouchDB base used to authenticate users (when basic auth is used).
 
-      yield request
-      .get "#{ @cfg.auth_base }/_session"
-      .accept 'json'
-      .auth user.name, user.pass
-      .then ({body}) =>
-        @req.session.couchdb_username = body.userCtx.name
-        @req.session.couchdb_roles = body.userCtx.roles
-        @req.session.admin = admin_role in @req.session.couchdb_roles
+      {body} = await request
+        .get "#{ @cfg.auth_base }/_session"
+        .accept 'json'
+        .auth user.name, user.pass
+
+      @req.session.couchdb_username = body.userCtx.name
+      @req.session.couchdb_roles = body.userCtx.roles
+      @req.session.admin = admin_role in @req.session.couchdb_roles
 
 Do not mask errors in the remaining middlewares.
 
