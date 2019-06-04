@@ -119,11 +119,6 @@ Order is important here, since these services may fallback to using the `public_
               version:pkg.version
               local:local.pkg.version
 
-CouchDB reverse proxy with embedded authentication
---------------------------------------------------
-
-          await @include require './public_proxy'
-
           return
 
 
