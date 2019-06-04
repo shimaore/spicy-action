@@ -1,18 +1,5 @@
     @include = ->
 
-Service presence.
-
-      @get '/_spicy_action', @auth, ->
-        @json @user_data()
-
-      @post '/_logout', ->
-        @req.session.regenerate (err) =>
-          if err
-            @res.status 500
-            @json ok: false
-          else
-            @json ok: true
-
       make_couchdb_proxy = require './make_couchdb_proxy'
 
 * cfg.proxy_base (URL or array of URLs, without authentication) Servers and ports used to build proxies for various services.
