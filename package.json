@@ -1,20 +1,20 @@
 {
   "name": "spicy-action",
   "docker_name": "shimaore/spicy-action",
-  "version": "16.0.0",
+  "version": "16.1.0-2",
   "description": "HTTP(S) proxy for CouchDB and others",
   "main": "index.js",
   "dependencies": {
     "basic-auth": "^2.0.1",
-    "body-parser": "^1.18.3",
+    "body-parser": "^1.19.0",
     "ccnq4-config": "^1.0.1",
-    "connect-redis": "^3.4.0",
-    "core-zappa": "^1.1.0",
-    "express-session": "^1.15.6",
-    "helmet": "^3.15.1",
+    "connect-redis": "^4.0.3",
+    "core-zappa": "^1.1.1",
+    "express-session": "^1.17.0",
+    "helmet": "^3.21.2",
     "request": "^2.88.0",
-    "superagent": "^5.0.3",
-    "tangible": "^3.0.0"
+    "superagent": "^5.1.0",
+    "tangible": "^3.1.0"
   },
   "devDependencies": {
     "chai": "^4.1.2",
