@@ -3,6 +3,7 @@
 
     connect_redis = require 'connect-redis'
     session = require 'express-session'
+    Redis = require 'ioredis'
 
     module.exports = (cfg,local) ->
 
@@ -65,8 +66,9 @@ Express: Store our session in Redis so that we can offload the Socket.IO piece t
       session_redis = cfg.session_redis ? cfg.redis
       if session_redis? and cfg.session_secret?
         session_store = connect_redis session
+        session_client = new Redis session_redis
         @use session
-          store: new session_store session_redis
+          store: new session_store client: session_client
           secret: cfg.session_secret
           resave: true
           unset: 'destroy'

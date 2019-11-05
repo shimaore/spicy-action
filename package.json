@@ -12,6 +12,7 @@
     "core-zappa": "^1.1.1",
     "express-session": "^1.17.0",
     "helmet": "^3.21.2",
+    "ioredis": "^4.14.1",
     "request": "^2.88.0",
     "superagent": "^5.1.0",
     "tangible": "^3.1.0"
