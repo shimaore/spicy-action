@@ -4,7 +4,7 @@
       @req.session = null
       @res
         .status 401
-        .set 'WWW-Authenticate': "Basic: realm=#{@pkg.name}"
+        .set 'WWW-Authenticate': "Basic: realm=spicy-action"
       @json error: 'Not authenticated'
       @res.end()
       return
