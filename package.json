@@ -1,7 +1,7 @@
 {
   "name": "spicy-action",
   "docker_name": "shimaore/spicy-action",
-  "version": "16.1.1",
+  "version": "17.0.0",
   "description": "HTTP(S) proxy for CouchDB and others",
   "main": "index.js",
   "dependencies": {
