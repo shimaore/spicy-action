@@ -1,5 +1,5 @@
     @middleware = auth_required = ->
-      if @req.session.couchdb_token?
+      if @req.session?.couchdb_token?
         return
       @req.session = null
       @res

@@ -5,6 +5,8 @@ The session is validated by ensuring that both the username and the roles array 
 
     @middleware = create_token = ->
 
+      @req.session ?= {}
+
       if @req.session.couchdb_token?
         return
 
